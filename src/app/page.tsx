@@ -281,7 +281,7 @@ export default function Home() {
                 <div className="mb-6">
                   <h3 className="font-heading text-lg font-bold text-accent uppercase tracking-wider">Pro</h3>
                   <div className="mt-2 flex items-baseline">
-                    <span className="font-mono text-4xl font-semibold tracking-tight text-text-primary">₹999</span>
+                    <span className="font-mono text-4xl font-semibold tracking-tight text-text-primary">₹xxx</span>
                     <span className="ml-1 text-sm text-text-muted">/ month</span>
                   </div>
                   <p className="text-xs text-text-muted mt-2 font-mono">For factories running weekly procurement cycles</p>
@@ -325,7 +325,7 @@ export default function Home() {
 
           <div className="mt-8 p-4 border border-border-default bg-accent-light text-center" style={{ borderRadius: '6px' }}>
             <span className="text-xs sm:text-sm text-text-secondary font-body">
-              ⚡ <strong>Founding Member Discount:</strong> Get Pro for only <strong>₹599/month</strong>. Limited to the first 10 customers. Locked in forever.
+              ⚡ <strong>Founding Member Discount:</strong> Get Pro for only <strong>₹xxx/month</strong>. Limited to the first 10 customers. Locked in forever.
             </span>
           </div>
         </div>
