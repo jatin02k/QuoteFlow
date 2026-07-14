@@ -1,11 +1,11 @@
 // src/app/(auth)/verify/page.tsx
 "use client"
 
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { VerifyOtp} from "@/actions/auth"
 
-export default function VerifyPage() {
+function VerifyContent() {
   const searchParams = useSearchParams()
   const email = searchParams.get("email") || ""
   
@@ -44,7 +44,6 @@ export default function VerifyPage() {
           <p className="font-body text-sm text-text-secondary mb-4">
             We sent a verification code to <span className="font-mono font-medium text-text-primary">{email}</span>
           </p>
-
           <form onSubmit={handleSubmit} className="space-y-4 flex flex-col">
             <div>
               <label htmlFor="otp" className="input-label text-lg font-medium">
@@ -82,5 +81,13 @@ export default function VerifyPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={<div>Loading verification page...</div>}>
+      <VerifyContent />
+    </Suspense>
   )
 }
