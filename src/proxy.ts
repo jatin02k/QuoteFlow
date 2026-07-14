@@ -55,5 +55,14 @@ export async function proxy(request: NextRequest) {
 
 // 5. Filter out static design assets so middleware only runs on valid routes
 export const config = {
-  matcher: ['/dashboard/:path*', '/rfqs/:path*', '/vendors/:path*', '/settings/:path*']
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],
 }
