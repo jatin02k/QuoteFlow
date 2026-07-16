@@ -31,3 +31,9 @@ export async function VerifyOtp(email:string, token:string){
     }
     redirect('/dashboard')
 }
+
+export async function SignOut() {
+    const supabase = await createClient()
+    await supabase.auth.signOut()
+    redirect('/login')
+}
