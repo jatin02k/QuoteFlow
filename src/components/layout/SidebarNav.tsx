@@ -67,7 +67,7 @@ export default function SidebarNav({ userEmail }: SidebarNavProps) {
       {/* Logo Header */}
       <div className="h-16 border-b border-border-default px-6 flex items-center">
         <Link href="/dashboard" className="flex items-center gap-2.5 hover:opacity-90 transition-opacity">
-          <div className="bg-accent text-white font-mono font-bold text-sm tracking-tight flex items-center justify-center h-8 w-8 border border-accent-hover rounded-[3px]">
+          <div className="bg-accent text-white font-mono font-bold text-sm tracking-tight flex items-center justify-center h-8 w-8 border border-accent-hover rounded-sm">
             QF
           </div>
           <div>
@@ -93,7 +93,7 @@ export default function SidebarNav({ userEmail }: SidebarNavProps) {
               key={item.name}
               id={`sidebar-link-${item.name.toLowerCase()}`}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-all rounded-[3px] border-l-[3px] ${
+              className={`flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-all rounded-sm border-l-[3px] ${
                 isActive
                   ? "bg-accent-light text-text-primary border-accent font-semibold"
                   : "text-text-secondary hover:text-text-primary hover:bg-bg-sunken border-transparent"
@@ -111,7 +111,7 @@ export default function SidebarNav({ userEmail }: SidebarNavProps) {
       {/* Footer Info & Sign Out */}
       <div className="border-t border-border-default p-4 bg-bg-surface space-y-3">
         {/* Operator Profile Plate */}
-        <div className="border border-border-default bg-bg-sunken p-3 rounded-[3px] text-xs">
+        <div className="border border-border-default bg-bg-sunken p-3 rounded-sm text-xs">
           <div className="text-[10px] font-heading font-semibold text-text-muted tracking-wider uppercase mb-1">
             ACTIVE OPERATOR
           </div>
@@ -125,7 +125,7 @@ export default function SidebarNav({ userEmail }: SidebarNavProps) {
           id="sidebar-button-signout"
           onClick={handleSignOut}
           disabled={isPending}
-          className="w-full text-left flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-text-secondary hover:text-status-error hover:bg-status-error-bg hover:border-status-error border border-transparent rounded-[3px] transition-all cursor-pointer font-heading tracking-wide uppercase disabled:opacity-50"
+          className="w-full text-left flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-text-secondary hover:text-status-error hover:bg-status-error-bg hover:border-status-error border border-transparent rounded-sm transition-all cursor-pointer font-heading tracking-wide uppercase disabled:opacity-50"
         >
           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="square">
             <path d="M9 21H3V3h6M15 17l5-5-5-5M20 12H9" />
