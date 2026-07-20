@@ -178,7 +178,7 @@ export default function VendorList({ initialVendors }: VendorListProps) {
                   id="category-filter"
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="pl-3 pr-8 py-2 bg-bg-base border border-border-default rounded-sm text-sm text-text-primary appearance-none focus:outline-hidden focus:border-accent focus:ring-1 focus:ring-accent cursor-pointer min-w-[160px]"
+                  className="pl-3 pr-8 py-2 bg-bg-base border border-border-default rounded-sm text-sm text-text-primary appearance-none focus:outline-hidden focus:border-accent focus:ring-1 focus:ring-accent cursor-pointer min-w-40"
                 >
                   <option value="All">All Categories</option>
                   <option value="Raw Material">Raw Material</option>
@@ -249,7 +249,7 @@ export default function VendorList({ initialVendors }: VendorListProps) {
                         {vendor.email}
                       </td>
                       <td className="px-6 py-4 font-mono text-xs text-text-secondary">
-                        {vendor.phone || <span className="text-text-disabled">—</span>}
+                        {vendor.phone || <span className="text-text-disabled">None</span>}
                       </td>
                       <td className="px-6 py-4 text-right">
                         <div className="flex items-center justify-end gap-2.5">
