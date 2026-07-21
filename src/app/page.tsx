@@ -7,9 +7,9 @@ export default function Home() {
       {/* Iron Gray Industrial Background with CAD Gears & Scattered Screws */}
       <IndustrialBackground />
 
-      {/* 1. NAVBAR - Solid Opaque Bar (Gears not visible behind it) */}
+      {/* 1. NAVBAR - Solid Opaque Bar */}
       <nav className="border-b border-white/15 bg-[#1E222A] sticky top-0 z-50 shadow-2xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div className="w-full px-6 sm:px-12 lg:px-16 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="font-heading font-bold text-xl tracking-tight text-white drop-shadow-md">
               QuoteFlow
@@ -36,29 +36,57 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* 2. HERO SECTION - Crisp Text Shadows */}
-      <header className="border-b border-white/10 bg-transparent py-24 lg:py-32">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <span className="text-xs uppercase font-heading font-bold tracking-widest text-[#F59E0B] mb-4 block [text-shadow:_0_2px_8px_rgba(0,0,0,0.95)]">
-            B2B Procurement Automation
-          </span>
-          <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight [text-shadow:_0_4px_20px_rgba(0,0,0,0.95),_0_2px_4px_rgba(0,0,0,0.9)]">
-            Vendor quotes. Compared. <br className="hidden sm:inline" />In minutes.
-          </h1>
-          <p className="text-lg sm:text-xl text-[#F3F4F6] max-w-2xl mx-auto mb-10 leading-relaxed font-body font-medium [text-shadow:_0_2px_12px_rgba(0,0,0,0.95),_0_1px_3px_rgba(0,0,0,0.9)]">
-            Stop managing RFQs over email and Excel. Upload your requirement once, dispatch to all vendors in one click, and see quotes auto-generate into a unified dashboard.
-          </p>
-          <div className="flex flex-col items-center justify-center gap-3">
-            <Link 
-              href="/login?signup=true" 
-              className="bg-accent hover:bg-accent-hover text-white text-base font-bold px-8 py-3.5 rounded-md border border-accent-hover transition-colors w-full sm:w-auto shadow-[0_10px_25px_rgba(0,0,0,0.8)]"
-              style={{ borderRadius: '6px' }}
-            >
-              Start Free — No Credit Card Required
-            </Link>
-            <span className="text-xs font-mono text-[#E2E8F0] bg-black/40 px-4 py-1.5 rounded-sm border border-white/20 shadow-md [text-shadow:_0_1px_4px_rgba(0,0,0,0.9)]">
-              Free plan includes 3 RFQs/month • Max 10 vendors
-            </span>
+      {/* 2. HERO SECTION - Full Viewport Height (100vh) & Uncropped Dashboard Image */}
+      <header className="border-b border-white/10 bg-transparent relative overflow-hidden min-h-[calc(100vh-64px)] flex items-center py-8 lg:py-0">
+        <div className="w-full px-6 sm:px-12 lg:px-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            
+            {/* Left Column: Integrated Hero Core Text */}
+            <div className="lg:col-span-5 text-left space-y-6 z-10">
+              <span className="text-xs uppercase font-heading font-bold tracking-widest text-[#F59E0B] block drop-shadow-[0_2px_10px_rgba(0,0,0,1)]">
+                B2B Procurement Automation
+              </span>
+
+              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.15] drop-shadow-[0_4px_24px_rgba(0,0,0,0.95)]">
+                Vendor quotes. <br />
+                Compared. In minutes.
+              </h1>
+
+              <p className="text-base sm:text-lg text-[#E2E8F0] font-body leading-relaxed max-w-xl font-normal drop-shadow-[0_2px_16px_rgba(0,0,0,0.95)]">
+                Stop managing RFQs over email and Excel. Upload your requirement once, dispatch to all vendors in one click, and see quotes auto-generate into a unified dashboard.
+              </p>
+
+              {/* Action Button & Plan Subtext */}
+              <div className="pt-2 space-y-4">
+                <div>
+                  <Link 
+                    href="/login?signup=true" 
+                    className="inline-block bg-accent hover:bg-accent-hover text-white text-base sm:text-lg font-bold px-8 py-4 rounded-md border border-accent-hover transition-colors shadow-2xl text-center"
+                    style={{ borderRadius: '6px' }}
+                  >
+                    Start Free — No Credit Card Required
+                  </Link>
+                </div>
+                
+                <div className="pt-1">
+                  <span className="text-xs font-mono text-[#CBD5E1] bg-[#1E222A]/90 px-4 py-2 rounded border border-[#475569] shadow-lg inline-block">
+                    Free plan includes 3 RFQs/month • Max 10 vendors
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side Image: Fully Visible, Uncropped Dashboard Screenshot */}
+            <div className="lg:col-span-7 w-full flex items-center justify-end z-10">
+              <div className="w-full max-w-3xl bg-[#1E222A]/90 p-2 sm:p-3 border border-[#475569] rounded-xl shadow-2xl">
+                <img
+                  src="/hero-dashboard.png"
+                  alt="QuoteFlow Live Vendor Quote Comparison Dashboard"
+                  className="w-full h-auto max-h-[78vh] object-contain rounded-lg border border-[#334155]"
+                />
+              </div>
+            </div>
+
           </div>
         </div>
       </header>
@@ -67,17 +95,17 @@ export default function Home() {
       <section className="py-20 border-b border-white/10 bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="text-xs uppercase font-heading font-bold tracking-widest text-[#F59E0B] mb-2 block [text-shadow:_0_2px_8px_rgba(0,0,0,0.9)]">
+            <span className="text-xs uppercase font-heading font-bold tracking-widest text-[#F59E0B] mb-2 block drop-shadow-md">
               Workflow Engine
             </span>
-            <h2 className="font-heading text-3xl font-extrabold text-white [text-shadow:_0_3px_12px_rgba(0,0,0,0.9)]">
+            <h2 className="font-heading text-3xl font-extrabold text-white drop-shadow-lg">
               How QuoteFlow Automates Your RFQ Cycle
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Step 1 */}
-            <div className="border border-[#475569] hover:border-accent/60 p-6 bg-[#1E222A]/60 backdrop-blur-xs shadow-2xl transition-all flex flex-col justify-between" style={{ borderRadius: '6px' }}>
+            <div className="border border-[#475569] hover:border-accent/60 p-6 bg-[#1E222A]/80 backdrop-blur-xs shadow-2xl transition-all flex flex-col justify-between" style={{ borderRadius: '6px' }}>
               <div>
                 <span className="font-mono text-sm text-[#F59E0B] font-bold block mb-4 drop-shadow-sm">STEP 01 // PARSE</span>
                 <h3 className="font-heading text-xl font-bold text-white mb-3 drop-shadow-md">
@@ -90,7 +118,7 @@ export default function Home() {
             </div>
 
             {/* Step 2 */}
-            <div className="border border-[#475569] hover:border-accent/60 p-6 bg-[#1E222A]/60 backdrop-blur-xs shadow-2xl transition-all flex flex-col justify-between" style={{ borderRadius: '6px' }}>
+            <div className="border border-[#475569] hover:border-accent/60 p-6 bg-[#1E222A]/80 backdrop-blur-xs shadow-2xl transition-all flex flex-col justify-between" style={{ borderRadius: '6px' }}>
               <div>
                 <span className="font-mono text-sm text-[#F59E0B] font-bold block mb-4 drop-shadow-sm">STEP 02 // DISPATCH</span>
                 <h3 className="font-heading text-xl font-bold text-white mb-3 drop-shadow-md">
@@ -103,7 +131,7 @@ export default function Home() {
             </div>
 
             {/* Step 3 */}
-            <div className="border border-[#475569] hover:border-accent/60 p-6 bg-[#1E222A]/60 backdrop-blur-xs shadow-2xl transition-all flex flex-col justify-between" style={{ borderRadius: '6px' }}>
+            <div className="border border-[#475569] hover:border-accent/60 p-6 bg-[#1E222A]/80 backdrop-blur-xs shadow-2xl transition-all flex flex-col justify-between" style={{ borderRadius: '6px' }}>
               <div>
                 <span className="font-mono text-sm text-[#F59E0B] font-bold block mb-4 drop-shadow-sm">STEP 03 // COMPARE</span>
                 <h3 className="font-heading text-xl font-bold text-white mb-3 drop-shadow-md">
@@ -132,7 +160,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
             {/* The Old Way */}
-            <div className="border border-status-error/50 bg-[#1E222A]/60 backdrop-blur-xs p-8 flex flex-col justify-between shadow-2xl" style={{ borderRadius: '6px' }}>
+            <div className="border border-status-error/50 bg-[#1E222A]/80 backdrop-blur-xs p-8 flex flex-col justify-between shadow-2xl" style={{ borderRadius: '6px' }}>
               <div>
                 <div className="flex items-center justify-between pb-4 border-b border-white/15 mb-6">
                   <h3 className="font-heading text-lg font-extrabold text-status-error uppercase tracking-wider drop-shadow-sm">
@@ -175,7 +203,7 @@ export default function Home() {
             </div>
 
             {/* The QuoteFlow Way */}
-            <div className="border-2 border-accent bg-[#1E222A]/60 backdrop-blur-xs p-8 flex flex-col justify-between shadow-2xl" style={{ borderRadius: '6px' }}>
+            <div className="border-2 border-accent bg-[#1E222A]/80 backdrop-blur-xs p-8 flex flex-col justify-between shadow-2xl" style={{ borderRadius: '6px' }}>
               <div>
                 <div className="flex items-center justify-between pb-4 border-b border-white/15 mb-6">
                   <h3 className="font-heading text-lg font-extrabold text-[#F59E0B] uppercase tracking-wider drop-shadow-sm">
@@ -234,7 +262,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
             {/* Free Tier */}
-            <div className="border border-[#475569] hover:border-white/40 bg-[#1E222A]/60 backdrop-blur-xs p-8 flex flex-col justify-between shadow-2xl" style={{ borderRadius: '6px' }}>
+            <div className="border border-[#475569] hover:border-white/40 bg-[#1E222A]/80 backdrop-blur-xs p-8 flex flex-col justify-between shadow-2xl" style={{ borderRadius: '6px' }}>
               <div>
                 <div className="mb-6">
                   <h3 className="font-heading text-lg font-bold text-[#E2E8F0] uppercase tracking-wider drop-shadow-sm">Free</h3>
@@ -277,7 +305,7 @@ export default function Home() {
             </div>
 
             {/* Pro Tier */}
-            <div className="border-2 border-accent bg-[#1E222A]/60 backdrop-blur-xs p-8 flex flex-col justify-between relative shadow-2xl" style={{ borderRadius: '6px' }}>
+            <div className="border-2 border-accent bg-[#1E222A]/80 backdrop-blur-xs p-8 flex flex-col justify-between relative shadow-2xl" style={{ borderRadius: '6px' }}>
               <div className="absolute top-0 right-8 transform -translate-y-1/2 bg-accent text-white px-3 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded-sm font-bold border border-accent-hover shadow-md">
                 Recommended
               </div>
@@ -327,7 +355,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-8 p-4 border border-white/20 bg-[#1E222A]/60 text-center shadow-lg" style={{ borderRadius: '6px' }}>
+          <div className="mt-8 p-4 border border-white/20 bg-[#1E222A]/80 text-center shadow-lg" style={{ borderRadius: '6px' }}>
             <span className="text-xs sm:text-sm text-[#E2E8F0] font-body">
               ⚡ <strong>Founding Member Discount:</strong> Get Pro for only <strong>₹xxx/month</strong>. Limited to the first 10 customers. Locked in forever.
             </span>
@@ -335,7 +363,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. FOOTER - Solid Opaque Bar (Gears not visible behind it) */}
+      {/* 6. FOOTER */}
       <footer className="bg-[#1E222A] border-t border-white/15 py-12 relative z-10 shadow-2xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="text-center md:text-left">

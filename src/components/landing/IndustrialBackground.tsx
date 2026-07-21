@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 /**
  * Authentic Mechanical Gear SVG Component
@@ -43,14 +43,14 @@ function RealGearSvg({
     const a3 = startAngle + anglePerTeeth * 0.65;
     const a4 = startAngle + anglePerTeeth * 0.85;
 
-    const x1 = center + innerRadius * Math.cos(a1);
-    const y1 = center + innerRadius * Math.sin(a1);
-    const x2 = center + outerRadius * Math.cos(a2);
-    const y2 = center + outerRadius * Math.sin(a2);
-    const x3 = center + outerRadius * Math.cos(a3);
-    const y3 = center + outerRadius * Math.sin(a3);
-    const x4 = center + innerRadius * Math.cos(a4);
-    const y4 = center + innerRadius * Math.sin(a4);
+    const x1 = (center + innerRadius * Math.cos(a1)).toFixed(2);
+    const y1 = (center + innerRadius * Math.sin(a1)).toFixed(2);
+    const x2 = (center + outerRadius * Math.cos(a2)).toFixed(2);
+    const y2 = (center + outerRadius * Math.sin(a2)).toFixed(2);
+    const x3 = (center + outerRadius * Math.cos(a3)).toFixed(2);
+    const y3 = (center + outerRadius * Math.sin(a3)).toFixed(2);
+    const x4 = (center + innerRadius * Math.cos(a4)).toFixed(2);
+    const y4 = (center + innerRadius * Math.sin(a4)).toFixed(2);
 
     if (i === 0) {
       gearPath += `M ${x1} ${y1}`;
@@ -66,9 +66,9 @@ function RealGearSvg({
   const cutouts = [];
   for (let i = 0; i < spokeCount; i++) {
     const angle = (i * Math.PI * 2) / spokeCount;
-    const cx = center + cutoutDist * Math.cos(angle);
-    const cy = center + cutoutDist * Math.sin(angle);
-    cutouts.push({ cx, cy, r: cutoutRadius });
+    const cx = Number((center + cutoutDist * Math.cos(angle)).toFixed(2));
+    const cy = Number((center + cutoutDist * Math.sin(angle)).toFixed(2));
+    cutouts.push({ cx, cy, r: Number(cutoutRadius.toFixed(2)) });
   }
 
   return (
@@ -77,6 +77,7 @@ function RealGearSvg({
       height={size}
       viewBox={`0 0 ${size} ${size}`}
       className={`overflow-visible drop-shadow-[0_16px_32px_rgba(0,0,0,0.8)] ${className}`}
+      suppressHydrationWarning
     >
       {/* Outer Glow / Shadow Bevel */}
       <path
@@ -112,7 +113,7 @@ function RealGearSvg({
       <circle
         cx={center}
         cy={center}
-        r={innerRadius * 0.86}
+        r={Number((innerRadius * 0.86).toFixed(2))}
         fill="none"
         stroke={lightOutlineColor}
         strokeWidth="1.5"
@@ -137,7 +138,7 @@ function RealGearSvg({
       <circle
         cx={center}
         cy={center}
-        r={holeRadius}
+        r={Number(holeRadius.toFixed(2))}
         fill="#1E222A"
         stroke={lightOutlineColor}
         strokeWidth="2.5"
@@ -145,9 +146,9 @@ function RealGearSvg({
 
       {/* Axle Key Notch */}
       <rect
-        x={center - holeRadius * 0.2}
-        y={center - holeRadius - 4}
-        width={holeRadius * 0.4}
+        x={Number((center - holeRadius * 0.2).toFixed(2))}
+        y={Number((center - holeRadius - 4).toFixed(2))}
+        width={Number((holeRadius * 0.4).toFixed(2))}
         height={8}
         fill="#1E222A"
         stroke={lightOutlineColor}
@@ -157,7 +158,7 @@ function RealGearSvg({
       <circle
         cx={center}
         cy={center}
-        r={holeRadius * 0.45}
+        r={Number((holeRadius * 0.45).toFixed(2))}
         fill={lightOutlineColor}
         fillOpacity="0.6"
       />
@@ -193,6 +194,8 @@ const PARTICLES: ParticleConfig[] = [
 ];
 
 export default function IndustrialBackground() {
+  const [isMounted, setIsMounted] = useState(false);
+
   const gear1Ref = useRef<HTMLDivElement>(null);
   const gear2Ref = useRef<HTMLDivElement>(null);
   const gear3Ref = useRef<HTMLDivElement>(null);
@@ -203,6 +206,12 @@ export default function IndustrialBackground() {
   const gearAngleRef = useRef(0);
 
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
     const handlePointerMove = (e: MouseEvent) => {
       mouseRef.current.x = e.clientX;
       mouseRef.current.y = e.clientY;
@@ -225,10 +234,8 @@ export default function IndustrialBackground() {
     });
 
     const updateLoop = () => {
-      // 1. GEAR ROTATION MATH (Constant Slow Idle + Scroll Speed Up - NO CURSOR ROTATION)
-      const idleSpeed = 0.08; // Constant smooth slow background rotation
+      const idleSpeed = 0.08;
       
-      // Decay scroll velocity input
       scrollRef.current.vy *= 0.9;
       const scrollBonus = Math.abs(scrollRef.current.vy) * 0.08;
 
@@ -246,7 +253,6 @@ export default function IndustrialBackground() {
         gear3Ref.current.style.transform = `rotate(${currentAngle * 2.25}deg)`;
       }
 
-      // 2. SCREWS & BOLTS CURSOR MAGNETIC REPULSION / REACTION
       const winW = window.innerWidth;
       const winH = window.innerHeight;
       const mouseX = mouseRef.current.x;
@@ -266,21 +272,20 @@ export default function IndustrialBackground() {
         const dx = actualX - mouseX;
         const dy = actualY - mouseY;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        const radius = 220; // Magnetic field radius around cursor
+        const radius = 220;
 
         let targetDx = 0;
         let targetDy = 0;
         let targetDr = 0;
 
         if (dist < radius && dist > 0) {
-          const force = (1 - dist / radius) * 90; // Push force strength
+          const force = (1 - dist / radius) * 90;
           const angle = Math.atan2(dy, dx);
           targetDx = Math.cos(angle) * force;
           targetDy = Math.sin(angle) * force;
-          targetDr = force * 2; // Extra spin on push
+          targetDr = force * 2;
         }
 
-        // Smooth Lerp physics towards target home offset
         current.x += (targetDx - current.x) * 0.12;
         current.y += (targetDy - current.y) * 0.12;
         current.r += (targetDr - current.r) * 0.1;
@@ -300,7 +305,21 @@ export default function IndustrialBackground() {
       window.removeEventListener("scroll", handleScroll);
       cancelAnimationFrame(requestRef);
     };
-  }, []);
+  }, [isMounted]);
+
+  // Render clean background during SSR to prevent float math hydration mismatch
+  if (!isMounted) {
+    return (
+      <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden bg-[#2E323B]">
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `radial-gradient(circle at 50% 50%, #3D4452 0%, #252930 100%)`,
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden bg-[#2E323B] text-[#94A3B8]">
@@ -361,8 +380,8 @@ export default function IndustrialBackground() {
         </div>
       ))}
 
-      {/* HUGE Screen-Covering Interlocking Gears Cluster (CONSTANT IDLE ROTATION + SPEED UP ON SCROLL ONLY) */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-75 scale-100 sm:scale-110 lg:scale-125">
+      {/* Screen-Covering Interlocking Gears Cluster (REDUCED SCALE FOR OPTIMAL VISUAL BALANCE) */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-70 scale-75 sm:scale-85 lg:scale-95">
         <div className="relative w-[1050px] h-[1050px] flex items-center justify-center">
           {/* Main Center Gear (36 Teeth) */}
           <div
