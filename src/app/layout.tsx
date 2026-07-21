@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   
   // Base configuration & cyber-industrial branding alignment
   title: {
-    default: "QuoteFlow // Operational Procurement Engine",
+    default: "QuoteFlow: Operational RFQ Engine",
     template: "%s // QuoteFlow",
   },
   description: "Automate raw material sourcing, dispatch multi-vendor RFQs, and optimize supplier pipelines.",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
 
   // Core Open Graph Data Mapping
   openGraph: {
-    title: "QuoteFlow // Industrial Procurement",
+    title: "QuoteFlow: Operational RFQ Engine",
     description: "Automate raw material sourcing, dispatch multi-vendor RFQs, and optimize supplier pipelines.",
     url: "https://quote-flow-ten.vercel.app",
     siteName: "QuoteFlow",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
         url: "/landing.png", // Routed path to your landing page preview
         width: 1200,             // Confirms the meta-declaration size
         height: 630,            
-        alt: "QuoteFlow Industrial Procurement Interface Preview",
+        alt: "QuoteFlow Operational RFQ Engine Preview",
       },
     ],
   },
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
   // Core Twitter/X Rich Card Protocol
   twitter: {
     card: "summary_large_image",
-    title: "QuoteFlow // Industrial Procurement",
+    title: "QuoteFlow: Operational RFQ Engine",
     description: "Automate raw material sourcing, dispatch multi-vendor RFQs, and optimize supplier pipelines.",
     images: ["/landing.png"],
     // Fixes: Missing twitter:site branding attribute
