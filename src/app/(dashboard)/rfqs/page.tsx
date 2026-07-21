@@ -45,7 +45,7 @@ export default async function RFQsPage() {
     );
   }
 
-  const rfqs = (result.data || []) as RFQ[];
+  const { active = [], deleted = [] } = result.data || {};
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
@@ -70,8 +70,8 @@ export default async function RFQsPage() {
         </Link>
       </div>
 
-      {/* Client List Component handling Search, Filter, Actions, Menu, Modals */}
-      <RFQList initialRFQs={rfqs} />
+      {/* Client List Component handling Active & Recently Deleted RFQs */}
+      <RFQList initialActiveRFQs={active} initialDeletedRFQs={deleted} />
     </div>
   );
 }

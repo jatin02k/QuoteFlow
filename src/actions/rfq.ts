@@ -1,9 +1,11 @@
 "use server";
 
 import { RFQSchema } from "@/app/lib/schemas";
-import { createClient } from "@/app/lib/supabase/server";
+import { createClient, createAdminClient } from "@/app/lib/supabase/server";
 import { ActionResult, RFQ } from "@/types";
 import { revalidatePath } from "next/cache";
+
+const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
 
 async function getAuthenticatedUser() {
   const supabase = await createClient();
@@ -15,16 +17,15 @@ async function getAuthenticatedUser() {
   return { supabase, user };
 }
 
-export async function getRFQs(): Promise<ActionResult<RFQ[]>> {
+export async function getRFQs(): Promise<ActionResult<{ active: RFQ[]; deleted: RFQ[] }>> {
   const { supabase, user } = await getAuthenticatedUser();
   if (!user || !supabase) return { success: false, error: "Unauthorized" };
 
   try {
-    const { data, error } = await supabase
+    const { data: allRfqs, error } = await supabase
       .from("rfqs")
       .select("*")
       .eq("company_id", user.id)
-      .neq("status", "deleted")
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -32,7 +33,56 @@ export async function getRFQs(): Promise<ActionResult<RFQ[]>> {
       return { success: false, error: "Failed to fetch RFQs." };
     }
 
-    return { success: true, data: (data || []) as RFQ[] };
+    const now = Date.now();
+    const active: RFQ[] = [];
+    const deleted: RFQ[] = [];
+    const expiredIdsToHardDelete: string[] = [];
+
+    (allRfqs || []).forEach((rfq: any) => {
+      // Ignore permanently deleted records
+      if (
+        rfq.status === "permanently_deleted" ||
+        rfq.parsed_data?.permanently_deleted === true ||
+        rfq.parsed_data?.is_permanently_deleted === true
+      ) {
+        return;
+      }
+
+      const isDeleted =
+        rfq.status === "deleted" ||
+        rfq.parsed_data?.is_deleted === true ||
+        Boolean(rfq.parsed_data?.deleted_at);
+
+      if (isDeleted) {
+        const deletedAtStr =
+          rfq.deleted_at ||
+          rfq.parsed_data?.deleted_at ||
+          rfq.updated_at ||
+          rfq.created_at;
+        const deletedTime = new Date(deletedAtStr).getTime();
+
+        if (now - deletedTime >= SEVEN_DAYS_MS) {
+          expiredIdsToHardDelete.push(rfq.id);
+        } else {
+          deleted.push({
+            ...rfq,
+            status: "deleted",
+            deleted_at: deletedAtStr,
+          });
+        }
+      } else {
+        active.push(rfq);
+      }
+    });
+
+    // Auto hard-delete RFQs older than 7 days
+    if (expiredIdsToHardDelete.length > 0) {
+      for (const id of expiredIdsToHardDelete) {
+        await hardDeleteRFQ(id);
+      }
+    }
+
+    return { success: true, data: { active, deleted } };
   } catch (err: any) {
     console.error("[getRFQs] Unexpected error:", err?.message || err);
     return { success: false, error: "Something went wrong while fetching RFQs." };
@@ -140,19 +190,40 @@ export async function getRFQ(id: string): Promise<ActionResult<RFQ>> {
 }
 
 export async function deleteRFQ(id: string): Promise<ActionResult> {
-  const { supabase, user } = await getAuthenticatedUser();
-  if (!user || !supabase) return { success: false, error: "Unauthorized" };
+  const { user } = await getAuthenticatedUser();
+  if (!user) return { success: false, error: "Unauthorized" };
 
   try {
-    const { error } = await supabase
+    const adminSupabase = createAdminClient();
+    const nowIso = new Date().toISOString();
+
+    const { data: existing } = await adminSupabase
       .from("rfqs")
-      .update({ status: "deleted" })
+      .select("parsed_data")
       .eq("id", id)
-      .eq("company_id", user.id);
+      .single();
+
+    const existingParsed =
+      existing?.parsed_data && typeof existing.parsed_data === "object"
+        ? existing.parsed_data
+        : {};
+    const updatedParsed = {
+      ...existingParsed,
+      deleted_at: nowIso,
+      is_deleted: true,
+    };
+
+    const { error } = await adminSupabase
+      .from("rfqs")
+      .update({
+        status: "deleted",
+        parsed_data: updatedParsed,
+      })
+      .eq("id", id);
 
     if (error) {
-      console.error("[deleteRFQ] DB error:", error.message);
-      return { success: false, error: "Failed to delete RFQ." };
+      console.error("[deleteRFQ] Admin DB error:", error.message);
+      return { success: false, error: "Failed to delete RFQ: " + error.message };
     }
 
     revalidatePath("/rfqs");
@@ -163,12 +234,87 @@ export async function deleteRFQ(id: string): Promise<ActionResult> {
   }
 }
 
+export async function restoreRFQ(id: string): Promise<ActionResult> {
+  const { user } = await getAuthenticatedUser();
+  if (!user) return { success: false, error: "Unauthorized" };
+
+  try {
+    const adminSupabase = createAdminClient();
+
+    const { data: existing } = await adminSupabase
+      .from("rfqs")
+      .select("parsed_data")
+      .eq("id", id)
+      .single();
+
+    const existingParsed =
+      existing?.parsed_data && typeof existing.parsed_data === "object"
+        ? { ...existing.parsed_data }
+        : {};
+    delete existingParsed.deleted_at;
+    delete existingParsed.is_deleted;
+    delete existingParsed.permanently_deleted;
+
+    const { error } = await adminSupabase
+      .from("rfqs")
+      .update({
+        status: "draft",
+        parsed_data: existingParsed,
+      })
+      .eq("id", id);
+
+    if (error) {
+      console.error("[restoreRFQ] Admin DB error:", error.message);
+      return { success: false, error: "Failed to restore RFQ: " + error.message };
+    }
+
+    revalidatePath("/rfqs");
+    return { success: true, data: null };
+  } catch (err: any) {
+    console.error("[restoreRFQ] Unexpected error:", err?.message || err);
+    return { success: false, error: "Something went wrong while restoring RFQ." };
+  }
+}
+
+export async function hardDeleteRFQ(id: string): Promise<ActionResult> {
+  const { user } = await getAuthenticatedUser();
+  if (!user) return { success: false, error: "Unauthorized" };
+
+  try {
+    const adminSupabase = createAdminClient();
+
+    // 1. Delete child records first to satisfy foreign key constraints
+    try {
+      await adminSupabase.from("quotes").delete().eq("rfq_id", id);
+    } catch (_) {}
+    try {
+      await adminSupabase.from("rfq_vendors").delete().eq("rfq_id", id);
+    } catch (_) {}
+
+    // 2. HARD DELETE the RFQ row directly from the Postgres database table!
+    const { error } = await adminSupabase
+      .from("rfqs")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      console.error("[hardDeleteRFQ] Admin DB Hard Delete error:", error.message);
+      return { success: false, error: "Failed to permanently delete RFQ: " + error.message };
+    }
+
+    revalidatePath("/rfqs");
+    return { success: true, data: null };
+  } catch (err: any) {
+    console.error("[hardDeleteRFQ] Unexpected error:", err?.message || err);
+    return { success: false, error: "Something went wrong while deleting RFQ permanently." };
+  }
+}
+
 export async function duplicateRFQ(id: string): Promise<ActionResult<{ id: string }>> {
   const { supabase, user } = await getAuthenticatedUser();
   if (!user || !supabase) return { success: false, error: "Unauthorized" };
 
   try {
-    // 1. Fetch original RFQ and verify ownership
     const { data: original, error: fetchError } = await supabase
       .from("rfqs")
       .select("*")
@@ -181,7 +327,6 @@ export async function duplicateRFQ(id: string): Promise<ActionResult<{ id: strin
       return { success: false, error: "RFQ not found or access denied." };
     }
 
-    // 2. Insert new duplicated RFQ
     const newTitle = original.title.endsWith("(Copy)")
       ? original.title
       : `${original.title} (Copy)`;
