@@ -45,6 +45,13 @@ export default function NewRFQPage() {
 
     setIsParsing(true);
     setErrorMsg(null);
+    setProductName('')
+setQuantity('')
+setUnit('')
+setSpecifications([])
+setDeadline('')
+setDeliveryLocation('')
+setSpecialRequirements('')
 
     try {
       const response = await fetch("/api/parse-rfq", {
@@ -105,11 +112,6 @@ export default function NewRFQPage() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("title", title.trim());
-    if (rawText.trim()) formData.append("description", rawText.trim());
-    if (selectedFile) formData.append("pdf", selectedFile);
-
     const parsedPayload = {
       product_name: productName.trim() || undefined,
       quantity: quantity.trim() || undefined,
@@ -120,6 +122,11 @@ export default function NewRFQPage() {
       special_requirements: specialRequirements.trim() || undefined,
     };
 
+    const formData = new FormData();
+    formData.append("title", title.trim());
+    if (rawText.trim()) formData.append("raw_text", rawText.trim());
+    if (deadline) formData.append("deadline", deadline);
+    if (selectedFile) formData.append("pdf", selectedFile);
     formData.append("parsed_data", JSON.stringify(parsedPayload));
 
     startTransition(async () => {

@@ -95,7 +95,25 @@ export async function createRFQ(
   const { supabase, user } = await getAuthenticatedUser();
   if (!user || !supabase) return { success: false, error: "Unauthorized" };
 
-  const result = RFQSchema.safeParse(input);
+  let payload: any = input;
+  if (typeof FormData !== "undefined" && input instanceof FormData) {
+    const rawParsed = input.get("parsed_data");
+    let parsedObj = {};
+    if (typeof rawParsed === "string" && rawParsed.trim()) {
+      try {
+        parsedObj = JSON.parse(rawParsed);
+      } catch (_) {}
+    }
+
+    payload = {
+      title: input.get("title")?.toString() || "",
+      raw_text: input.get("raw_text")?.toString() || input.get("description")?.toString() || null,
+      deadline: input.get("deadline")?.toString() || input.get("delivery_deadline")?.toString() || null,
+      parsed_data: parsedObj,
+    };
+  }
+
+  const result = RFQSchema.safeParse(payload);
   if (!result.success) {
     return { success: false, error: result.error.issues[0].message };
   }
@@ -134,7 +152,25 @@ export async function updateRFQDraft(
   const { supabase, user } = await getAuthenticatedUser();
   if (!user || !supabase) return { success: false, error: "Unauthorized" };
 
-  const result = RFQSchema.partial().safeParse(input);
+  let payload: any = input;
+  if (typeof FormData !== "undefined" && input instanceof FormData) {
+    const rawParsed = input.get("parsed_data");
+    let parsedObj = undefined;
+    if (typeof rawParsed === "string" && rawParsed.trim()) {
+      try {
+        parsedObj = JSON.parse(rawParsed);
+      } catch (_) {}
+    }
+
+    payload = {
+      title: input.get("title")?.toString() || undefined,
+      raw_text: input.get("raw_text")?.toString() || input.get("description")?.toString() || undefined,
+      deadline: input.get("deadline")?.toString() || input.get("delivery_deadline")?.toString() || undefined,
+      parsed_data: parsedObj,
+    };
+  }
+
+  const result = RFQSchema.partial().safeParse(payload);
   if (!result.success) {
     return { success: false, error: result.error.issues[0].message };
   }

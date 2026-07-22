@@ -1,10 +1,18 @@
-import { NextRequest, NextResponse } from "next/server";
 import { parseRFQ } from "@/lib/gemini";
+import { createClient } from "@/lib/supabase/server";
+import { NextRequest, NextResponse } from "next/server";
+
 
 // Force Next.js to run this API handler dynamically on every request (no caching)
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
+  // Add this at the top
+  const supabase = await createClient();
+  const { data: { user }, error } = await supabase.auth.getUser()
+  if (error || !user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
   try {
     const body = await req.json();
     const text = body.text;
