@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useTransition } from "react";
-import { VendorSchema } from "@/app/lib/schemas";
+import { VendorSchema } from "@/lib/schemas";
 import { addVendors, updateVendor } from "@/actions/vendor";
 import { Vendor } from "@/types";
 

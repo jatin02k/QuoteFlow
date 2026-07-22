@@ -1,7 +1,7 @@
 "use server";
 
-import { VendorSchema } from "@/app/lib/schemas";
-import { createClient } from "@/app/lib/supabase/server";
+import { VendorSchema } from "@/lib/schemas";
+import { createClient } from "@/lib/supabase/server";
 import { ActionResult } from "@/types";
 import { revalidatePath } from "next/cache";
 

@@ -5,7 +5,7 @@ import RFQList from "@/components/rfq/RFQList";
 import { RFQ } from "@/types";
 
 export const metadata = {
-  title: "Requests for Quotation // QuoteFlow",
+  title: "Requests for Quotation: QuoteFlow",
   description: "Manage, create, dispatch, and track manufacturing RFQs.",
 };
 

@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from "@/app/lib/supabase/server"
+import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/dist/client/components/navigation"
 
 export async function SendOtp(email:string){

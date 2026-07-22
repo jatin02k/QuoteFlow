@@ -48,3 +48,14 @@ export interface RFQ {
   created_at: string;
   deleted_at?: string | null;
 }
+
+export interface GeminiResponse {
+  productName: string;
+  quantity: string;
+  unit: string;
+  specifications: string[];
+  deliveryDeadline: string;
+  deliveryLocation: string;
+  specialRequirements: string;
+}
+

@@ -1,7 +1,7 @@
 "use server";
 
-import { RFQSchema } from "@/app/lib/schemas";
-import { createClient, createAdminClient } from "@/app/lib/supabase/server";
+import { RFQSchema } from "@/lib/schemas";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { ActionResult, RFQ } from "@/types";
 import { revalidatePath } from "next/cache";
 
