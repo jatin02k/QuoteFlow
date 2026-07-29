@@ -21,6 +21,7 @@ export async function getRFQs(): Promise<ActionResult<{ active: RFQ[]; deleted: 
   const { supabase, user } = await getAuthenticatedUser();
   if (!user || !supabase) return { success: false, error: "Unauthorized" };
 
+
   try {
     const { data: allRfqs, error } = await supabase
       .from("rfqs")
@@ -96,6 +97,8 @@ export async function createRFQ(
   if (!user || !supabase) return { success: false, error: "Unauthorized" };
 
   let payload: any = input;
+  let fileToUpload: File | null = null;
+
   if (typeof FormData !== "undefined" && input instanceof FormData) {
     const rawParsed = input.get("parsed_data");
     let parsedObj = {};
@@ -103,6 +106,11 @@ export async function createRFQ(
       try {
         parsedObj = JSON.parse(rawParsed);
       } catch (_) {}
+    }
+
+    const pdf = input.get("pdf");
+    if ( pdf && pdf instanceof File && pdf.size > 0){
+      fileToUpload = pdf
     }
 
     payload = {
@@ -119,6 +127,34 @@ export async function createRFQ(
   }
 
   try {
+
+    let attachmentUrl: string | null = null;
+
+    if(fileToUpload){
+      const fileExt = fileToUpload.name.split(".").pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `drawings/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("rfq-attachments")
+        .upload(filePath, fileToUpload, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (uploadError) {
+        console.error("[createRFQ] Storage upload error:", uploadError.message);
+        return { success: false, error: `Failed to upload PDF: ${uploadError.message}` };
+      }
+
+      // 3. Get public URL for the uploaded drawing
+      const { data: publicUrlData } = supabase.storage
+        .from("rfq-attachments")
+        .getPublicUrl(filePath);
+
+      attachmentUrl = publicUrlData.publicUrl;
+    }
+
     const { data, error } = await supabase
       .from("rfqs")
       .insert({
@@ -127,6 +163,7 @@ export async function createRFQ(
         raw_text: result.data.raw_text?.trim() || null,
         deadline: result.data.deadline || null,
         parsed_data: result.data.parsed_data || {},
+        attachment_url:attachmentUrl,
         status: "draft",
       })
       .select("id")

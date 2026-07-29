@@ -39,19 +39,21 @@ export default function NewRFQPage() {
   // AI Parsing Handler - Direct State Overwrites
   const handleParseAI = async () => {
     if (!rawText.trim()) {
-      setErrorMsg("Please enter or paste requirement text before parsing with AI.");
+      setErrorMsg(
+        "Please enter or paste requirement text before parsing with AI.",
+      );
       return;
     }
 
     setIsParsing(true);
     setErrorMsg(null);
-    setProductName('')
-setQuantity('')
-setUnit('')
-setSpecifications([])
-setDeadline('')
-setDeliveryLocation('')
-setSpecialRequirements('')
+    setProductName("");
+    setQuantity("");
+    setUnit("");
+    setSpecifications([]);
+    setDeadline("");
+    setDeliveryLocation("");
+    setSpecialRequirements("");
 
     try {
       const response = await fetch("/api/parse-rfq", {
@@ -69,20 +71,30 @@ setSpecialRequirements('')
 
         // Unconditional resets to wipe out any previous/stale values
         setProductName(data.productName || "");
-        setQuantity(data.quantity !== undefined && data.quantity !== null ? String(data.quantity) : "");
+        setQuantity(
+          data.quantity !== undefined && data.quantity !== null
+            ? String(data.quantity)
+            : "",
+        );
         setUnit(data.unit || "PCS");
-        setSpecifications(Array.isArray(data.specifications) ? data.specifications : []);
+        setSpecifications(
+          Array.isArray(data.specifications) ? data.specifications : [],
+        );
         setDeadline(data.deliveryDeadline || "");
         setDeliveryLocation(data.deliveryLocation || "");
         setSpecialRequirements(data.specialRequirements || "");
 
         showToast("Requirements parsed with AI successfully!");
       } else {
-        setErrorMsg(result.error || "Failed to parse requirement text with AI.");
+        setErrorMsg(
+          result.error || "Failed to parse requirement text with AI.",
+        );
       }
     } catch (err: any) {
       console.error("[handleParseAI] Error:", err);
-      setErrorMsg("An error occurred while connecting to the AI parsing service.");
+      setErrorMsg(
+        "An error occurred while connecting to the AI parsing service.",
+      );
     } finally {
       setIsParsing(false);
     }
@@ -183,15 +195,27 @@ setSpecialRequirements('')
       {/* General Error Banner */}
       {errorMsg && (
         <div className="p-4 bg-status-error-bg border border-status-error text-status-error text-xs rounded-sm flex items-start gap-3">
-          <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="square" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          <svg
+            className="w-4 h-4 shrink-0 mt-0.5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="square"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+            />
           </svg>
           <div className="font-body leading-normal">{errorMsg}</div>
         </div>
       )}
 
       {/* Two Column Layout */}
-      <form onSubmit={handleSaveDraft} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+      <form
+        onSubmit={handleSaveDraft}
+        className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start"
+      >
         {/* LEFT COLUMN: Title + Raw Requirement Input */}
         <div className="space-y-6">
           {/* RFQ Title Input */}
@@ -249,16 +273,40 @@ setSpecialRequirements('')
                 >
                   {isParsing ? (
                     <>
-                      <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      <svg
+                        className="animate-spin h-4 w-4 text-white"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
                       </svg>
                       <span>Parsing with AI...</span>
                     </>
                   ) : (
                     <>
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="square" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="square"
+                          d="M13 10V3L4 14h7v7l9-11h-7z"
+                        />
                       </svg>
                       <span>Parse with AI</span>
                     </>
@@ -266,8 +314,17 @@ setSpecialRequirements('')
                 </button>
 
                 <label className="px-4 py-2.5 border border-border-default bg-bg-base hover:bg-bg-sunken text-text-secondary text-xs font-semibold rounded-sm transition-colors cursor-pointer flex items-center gap-2">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="square" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="square"
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                    />
                   </svg>
                   <span>Upload PDF</span>
                   <input
@@ -504,9 +561,24 @@ setSpecialRequirements('')
               >
                 {isPending ? (
                   <>
-                    <svg className="animate-spin h-3.5 w-3.5 text-text-primary" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    <svg
+                      className="animate-spin h-3.5 w-3.5 text-text-primary"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
                     </svg>
                     <span>Saving...</span>
                   </>
