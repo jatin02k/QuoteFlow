@@ -12,7 +12,7 @@ export default function Home() {
         <div className="w-full px-6 sm:px-12 lg:px-16 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="font-heading font-bold text-xl tracking-tight text-white drop-shadow-md">
-              QuoteFlow
+              RFQPilot
             </span>
             <span className="text-[10px] uppercase font-mono tracking-wider bg-white/10 border border-white/20 px-2 py-0.5 rounded-sm text-[#E2E8F0]">
               v1.0 (Beta)
@@ -81,7 +81,7 @@ export default function Home() {
               <div className="w-full max-w-3xl bg-[#1E222A]/90 p-2 sm:p-3 border border-[#475569] rounded-xl shadow-2xl">
                 <img
                   src="/hero-dashboard.png"
-                  alt="QuoteFlow Live Vendor Quote Comparison Dashboard"
+                  alt="RFQPilot Live Vendor Quote Comparison Dashboard"
                   className="w-full h-auto max-h-[78vh] object-contain rounded-lg border border-[#334155]"
                 />
               </div>
@@ -99,7 +99,7 @@ export default function Home() {
               Workflow Engine
             </span>
             <h2 className="font-heading text-3xl font-extrabold text-white drop-shadow-lg">
-              How QuoteFlow Automates Your RFQ Cycle
+              How RFQPilot Automates Your RFQ Cycle
             </h2>
           </div>
 
@@ -138,7 +138,7 @@ export default function Home() {
                   3. Compare quotes in one table
                 </h3>
                 <p className="text-sm text-[#E2E8F0] leading-relaxed drop-shadow-sm">
-                  As suppliers fill quotes on their phones or laptops, QuoteFlow calculates total costs and organizes them into a clean matrix, auto-highlighting optimal matches.
+                  As suppliers fill quotes on their phones or laptops, RFQPilot calculates total costs and organizes them into a clean matrix, auto-highlighting optimal matches.
                 </p>
               </div>
             </div>
@@ -202,12 +202,12 @@ export default function Home() {
               </div>
             </div>
 
-            {/* The QuoteFlow Way */}
+            {/* The RFQPilot Way */}
             <div className="border-2 border-accent bg-[#1E222A]/80 backdrop-blur-xs p-8 flex flex-col justify-between shadow-2xl" style={{ borderRadius: '6px' }}>
               <div>
                 <div className="flex items-center justify-between pb-4 border-b border-white/15 mb-6">
                   <h3 className="font-heading text-lg font-extrabold text-[#F59E0B] uppercase tracking-wider drop-shadow-sm">
-                    With QuoteFlow
+                    With RFQPilot
                   </h3>
                   <span className="text-xs font-mono text-status-success bg-status-success-bg/40 px-2.5 py-1 rounded-sm border border-status-success/50 font-bold">
                     20 Minutes Total
@@ -368,7 +368,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="text-center md:text-left">
             <span className="font-heading font-bold text-lg tracking-tight text-white drop-shadow-sm">
-              QuoteFlow
+              RFQPilot
             </span>
             <p className="text-xs text-[#E2E8F0] mt-1 font-body">
               An RFQ Engine Built for Indian Manufacturers.
@@ -379,7 +379,7 @@ export default function Home() {
               Made in Noida, India.
             </span>
             <p className="text-[10px] text-[#E2E8F0]/60 mt-1 font-mono">
-              © {new Date().getFullYear()} QuoteFlow. All rights reserved.
+              © {new Date().getFullYear()} RFQPilot. All rights reserved.
             </p>
           </div>
         </div>

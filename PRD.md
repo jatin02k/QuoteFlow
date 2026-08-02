@@ -1,16 +1,16 @@
-# QuoteFlow — Product Requirements Document
+# RFQPilot — Product Requirements Document
 Version 1.0 | For Indian Manufacturing SMEs
 
 ---
 
 ## 1. Product Overview
 
-**Name:** QuoteFlow  
+**Name:** RFQPilot  
 **Tagline:** Vendor quotes. Compared. In minutes.  
 **Type:** B2B SaaS — Procurement Automation Tool
 
 ### What It Is
-QuoteFlow eliminates the email and Excel chaos that Indian manufacturing companies face when collecting and comparing vendor quotes. Instead of manually emailing 20 vendors, waiting for scattered replies, and copying prices into a spreadsheet — the owner uploads their requirement once, the system handles everything, and they see a clean comparison table when vendors respond.
+RFQPilot eliminates the email and Excel chaos that Indian manufacturing companies face when collecting and comparing vendor quotes. Instead of manually emailing 20 vendors, waiting for scattered replies, and copying prices into a spreadsheet — the owner uploads their requirement once, the system handles everything, and they see a clean comparison table when vendors respond.
 
 ### The Problem
 Manufacturing companies with 50–200 employees run 15–30 procurement cycles every month. Each cycle:

@@ -4,7 +4,7 @@ import { getRFQ } from "@/actions/rfq";
 import { RFQStatus } from "@/types";
 
 export const metadata = {
-  title: "RFQ Details // QuoteFlow",
+  title: "RFQ Details // RFQPilot",
   description: "View RFQ details and vendor quotes.",
 };
 

@@ -33,11 +33,11 @@ export async function proxy(request: NextRequest) {
   // 2. Refresh the session cookie in the background automatically
   const { data: { user } } = await supabase.auth.getUser()
 
-  // 3. Define the routing paths for QuoteFlow
+  // 3. Define the routing paths for RFQPilot
   const isLoginPage = request.nextUrl.pathname.startsWith('/login')
   const isDashboardPage = request.nextUrl.pathname.startsWith('/dashboard')
 
-  // 4. Enforce QuoteFlow Security Guards
+  // 4. Enforce RFQPilot Security Guards
   
   // If user is logged in, do not let them go back to the login page
   if (user && isLoginPage) {

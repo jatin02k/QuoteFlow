@@ -4,12 +4,12 @@ import './globals.css'
 
 export const metadata: Metadata = {
   // Fixes absolute image scaling requirements globally
-  metadataBase: new URL("https://quote-flow-ten.vercel.app"), 
+  metadataBase: new URL("https://rfq-pilot-ten.vercel.app"), 
   
   // Base configuration & cyber-industrial branding alignment
   title: {
-    default: "QuoteFlow: Operational RFQ Engine",
-    template: "%s // QuoteFlow",
+    default: "RFQPilot: Operational RFQ Engine",
+    template: "%s // RFQPilot",
   },
   description: "Automate raw material sourcing, dispatch multi-vendor RFQs, and optimize supplier pipelines.",
   
@@ -38,10 +38,10 @@ export const metadata: Metadata = {
 
   // Core Open Graph Data Mapping
   openGraph: {
-    title: "QuoteFlow: Operational RFQ Engine",
+    title: "RFQPilot: Operational RFQ Engine",
     description: "Automate raw material sourcing, dispatch multi-vendor RFQs, and optimize supplier pipelines.",
-    url: "https://quote-flow-ten.vercel.app",
-    siteName: "QuoteFlow",
+    url: "https://rfq-pilot-ten.vercel.app",
+    siteName: "RFQPilot",
     locale: "en_US",
     type: "website",
     images: [
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
         url: "/landing.png", // Routed path to your landing page preview
         width: 1200,             // Confirms the meta-declaration size
         height: 630,            
-        alt: "QuoteFlow Operational RFQ Engine Preview",
+        alt: "RFQPilot Operational RFQ Engine Preview",
       },
     ],
   },
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
   // Core Twitter/X Rich Card Protocol
   twitter: {
     card: "summary_large_image",
-    title: "QuoteFlow: Operational RFQ Engine",
+    title: "RFQPilot: Operational RFQ Engine",
     description: "Automate raw material sourcing, dispatch multi-vendor RFQs, and optimize supplier pipelines.",
     images: ["/landing.png"],
     // Fixes: Missing twitter:site branding attribute

@@ -68,11 +68,11 @@ export default function SidebarNav({ userEmail }: SidebarNavProps) {
       <div className="h-16 border-b border-border-default px-6 flex items-center">
         <Link href="/dashboard" className="flex items-center gap-2.5 hover:opacity-90 transition-opacity">
           <div className="bg-accent text-white font-mono font-bold text-sm tracking-tight flex items-center justify-center h-8 w-8 border border-accent-hover rounded-sm">
-            QF
+            RP
           </div>
           <div>
             <span className="font-heading text-lg font-bold tracking-tight text-text-primary block leading-none">
-              QuoteFlow
+              RFQPilot
             </span>
             <span className="font-mono text-[9px] text-text-muted tracking-wider uppercase block mt-0.5">
               SYS.VER 1.0 // P2P

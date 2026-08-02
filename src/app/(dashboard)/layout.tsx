@@ -15,7 +15,7 @@ export default async function DashboardLayout({
     redirect('/login')
   }
 
-  const userEmail = user.email || 'operator@quoteflow.in'
+  const userEmail = user.email || 'operator@rfqpilot.in'
 
   return (
     <div className="flex min-h-screen bg-bg-base font-body text-text-primary antialiased">

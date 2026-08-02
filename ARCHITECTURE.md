@@ -1,4 +1,4 @@
-# QuoteFlow — Architecture & Tech Stack
+# RFQPilot — Architecture & Tech Stack
 
 ---
 
@@ -76,7 +76,7 @@ Both use Gemini 1.5 Flash (free tier).
 ## File Structure
 
 ```
-quoteflow/
+rfqpilot/
 ├── src/
 │   ├── app/
 │   │   ├── (auth)/

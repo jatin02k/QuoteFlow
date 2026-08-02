@@ -29,7 +29,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="mb-6 text-center">
           <h1 className="font-heading text-5xl font-bold tracking-tight text-text-primary">
-            QuoteFlow
+            RFQPilot
           </h1>
           <p className="font-body text-lg text-text-muted mt-3">
             Vendor quotes. Compared. In minutes.
@@ -37,7 +37,7 @@ export default function LoginPage() {
         </div>
         <div className="border border-border-strong bg-bg-surface p-6 rounded-md shadow-sm">
           <h2 className="font-heading text-2xl font-medium text-text-primary mb-9">
-            Sign in to Quoteflow
+            Sign in to RFQPilot
           </h2>
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>

@@ -1,10 +1,10 @@
-# QuoteFlow — Design System
+# RFQPilot — Design System
 
 ## Design Philosophy
 
 **Aesthetic: Industrial Utilitarian**
 
-QuoteFlow is used by factory owners and procurement managers — people who work in physical, real-world environments. The interface should feel like a precision tool, not a startup app.
+RFQPilot is used by factory owners and procurement managers — people who work in physical, real-world environments. The interface should feel like a precision tool, not a startup app.
 
 Think: a well-made gauge on a machine panel. Clean. Legible. Functional. Trustworthy.
 
@@ -479,7 +479,7 @@ Vendor emails should feel professional and clear. Plain HTML, no fancy design.
 Subject: RFQ from [Company Name] — [Product Name]
 
 ─────────────────────────────────
-QuoteFlow
+RFQPilot
 ─────────────────────────────────
 
 [Company Name] has requested a quote from you.
@@ -501,7 +501,7 @@ SPECIFICATIONS
 
 This link is unique to you. Quote deadline: 15 March 2026.
 ─────────────────────────────────
-QuoteFlow — Procurement made simple
+RFQPilot — Procurement made simple
 ```
 
 ---
