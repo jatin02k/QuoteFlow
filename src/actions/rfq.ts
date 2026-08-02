@@ -4,6 +4,7 @@ import { RFQSchema } from "@/lib/schemas";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { ActionResult, RFQ } from "@/types";
 import { revalidatePath } from "next/cache";
+import { sendRFQEmail } from "@/lib/resend";
 
 const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
 
@@ -431,3 +432,211 @@ export async function duplicateRFQ(id: string): Promise<ActionResult<{ id: strin
     return { success: false, error: "Something went wrong while duplicating RFQ." };
   }
 }
+
+export async function getRFQVendors(rfqId: string): Promise<ActionResult<Array<{
+  id: string;
+  rfq_id: string;
+  vendor_id: string;
+  token: string;
+  status: string;
+  email_sent_at: string | null;
+}>>> {
+  const { supabase, user } = await getAuthenticatedUser();
+  if (!user || !supabase) return { success: false, error: "Unauthorized" };
+
+  try {
+    const { data, error } = await supabase
+      .from("rfq_vendors")
+      .select("*")
+      .eq("rfq_id", rfqId);
+
+    if (error) {
+      console.error("[getRFQVendors] DB error:", error.message);
+      return { success: false, error: "Failed to fetch RFQ vendor tracking." };
+    }
+
+    return { success: true, data: data || [] };
+  } catch (err: any) {
+    console.error("[getRFQVendors] Unexpected error:", err?.message || err);
+    return { success: false, error: "Something went wrong fetching vendor tracking data." };
+  }
+}
+
+export async function getCompanyName(): Promise<string> {
+  const { supabase, user } = await getAuthenticatedUser();
+  if (!user || !supabase) return "Industrial Sourcing";
+
+  try {
+    const { data } = await supabase
+      .from("companies")
+      .select("name")
+      .eq("id", user.id)
+      .single();
+
+    if (data?.name) return data.name;
+
+    if (user.user_metadata?.company_name) return user.user_metadata.company_name;
+    const emailPrefix = user.email?.split("@")[0] || "Manufacturing";
+    return emailPrefix.charAt(0).toUpperCase() + emailPrefix.slice(1) + " Corp";
+  } catch (_) {
+    return "Industrial Sourcing";
+  }
+}
+
+export async function sendRFQ(
+  rfqId: string,
+  vendorIds: string[]
+): Promise<ActionResult<{ sent: number; failed: number }>> {
+  const { supabase, user } = await getAuthenticatedUser();
+  if (!user || !supabase) return { success: false, error: "Unauthorized" };
+
+  if (!rfqId || !Array.isArray(vendorIds) || vendorIds.length === 0) {
+    return { success: false, error: "Please select at least one vendor to dispatch RFQ." };
+  }
+
+  try {
+    // 1. Fetch RFQ & verify ownership
+    const { data: rfq, error: rfqError } = await supabase
+      .from("rfqs")
+      .select("*")
+      .eq("id", rfqId)
+      .eq("company_id", user.id)
+      .single();
+
+    if (rfqError || !rfq) {
+      console.error("[sendRFQ] RFQ not found or access denied:", rfqError?.message);
+      return { success: false, error: "RFQ not found or access denied." };
+    }
+
+    // 2. Fetch company name
+    const companyName = await getCompanyName();
+
+    // 3. Fetch existing rfq_vendors for skipping already sent
+    const { data: existingRfqVendors } = await supabase
+      .from("rfq_vendors")
+      .select("*")
+      .eq("rfq_id", rfqId);
+
+    const alreadySentVendorMap = new Map<string, string>();
+    (existingRfqVendors || []).forEach((row: any) => {
+      if (row.email_sent_at) {
+        alreadySentVendorMap.set(row.vendor_id, row.token);
+      }
+    });
+
+    // 4. Generate signed URL for attachment if exists
+    let attachmentSignedUrl: string | null = null;
+    let attachmentName: string | null = rfq.attachment_name || null;
+
+    if (rfq.attachment_url) {
+      if (!attachmentName) attachmentName = "RFQ_Drawing_Attachment.pdf";
+      try {
+        let storagePath = rfq.attachment_url;
+        if (storagePath.includes("/rfq-attachments/")) {
+          storagePath = storagePath.split("/rfq-attachments/")[1];
+        }
+        const { data: signedData, error: signedErr } = await supabase.storage
+          .from("rfq-attachments")
+          .createSignedUrl(storagePath, 60 * 60 * 24 * 7);
+
+        if (!signedErr && signedData?.signedUrl) {
+          attachmentSignedUrl = signedData.signedUrl;
+        } else {
+          attachmentSignedUrl = rfq.attachment_url;
+        }
+      } catch (_) {
+        attachmentSignedUrl = rfq.attachment_url;
+      }
+    }
+
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    let sentCount = 0;
+    let failedCount = 0;
+
+    for (const vendorId of vendorIds) {
+      if (alreadySentVendorMap.has(vendorId)) {
+        continue;
+      }
+
+      const { data: vendor, error: vError } = await supabase
+        .from("vendors")
+        .select("*")
+        .eq("id", vendorId)
+        .eq("company_id", user.id)
+        .single();
+
+      if (vError || !vendor || !vendor.email) {
+        console.error("[sendRFQ] Invalid vendor record for ID:", vendorId, vError?.message);
+        failedCount++;
+        continue;
+      }
+
+      const token = crypto.randomUUID();
+      const responseLink = `${appUrl}/respond/${token}`;
+      const nowIso = new Date().toISOString();
+
+      const { error: upsertError } = await supabase
+        .from("rfq_vendors")
+        .upsert(
+          {
+            rfq_id: rfqId,
+            vendor_id: vendorId,
+            token,
+            status: "pending",
+            email_sent_at: nowIso,
+          },
+          { onConflict: "rfq_id,vendor_id" }
+        );
+
+      if (upsertError) {
+        console.error("[sendRFQ] Failed upserting rfq_vendors:", upsertError.message);
+        failedCount++;
+        continue;
+      }
+
+      const emailSuccess = await sendRFQEmail({
+        vendorEmail: vendor.email,
+        vendorName: vendor.name,
+        companyName,
+        rfqTitle: rfq.title,
+        parsedData: rfq.parsed_data || {},
+        rawText: rfq.raw_text,
+        attachmentName,
+        attachmentUrl: attachmentSignedUrl,
+        responseLink,
+        deadline: rfq.deadline,
+      });
+
+      if (emailSuccess) {
+        sentCount++;
+      } else {
+        failedCount++;
+      }
+    }
+
+    const { data: updatedRfqVendors } = await supabase
+      .from("rfq_vendors")
+      .select("id")
+      .eq("rfq_id", rfqId)
+      .not("email_sent_at", "is", null);
+
+    const totalContacted = updatedRfqVendors?.length || (alreadySentVendorMap.size + sentCount);
+
+    await supabase
+      .from("rfqs")
+      .update({
+        status: "sent",
+        vendors_contacted: totalContacted,
+      })
+      .eq("id", rfqId);
+
+    revalidatePath("/rfqs");
+    revalidatePath(`/rfqs/${rfqId}`);
+
+    return { success: true, data: { sent: sentCount, failed: failedCount } };
+  } catch (err: any) {
+    console.error("[sendRFQ] Unexpected error in dispatching RFQ:", err?.message || err);
+    return { success: false, error: "Something went wrong while dispatching RFQ emails." };
+  }
+}
+

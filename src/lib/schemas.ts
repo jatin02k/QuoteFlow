@@ -31,3 +31,17 @@ export const RFQSchema = z.object({
 });
 
 export type RFQInput = z.infer<typeof RFQSchema>;
+
+export const QuoteSchema = z.object({
+  unit_price: z.number().min(0.01, "Unit price must be at least ₹0.01"),
+  quantity_available: z.number().min(1, "Quantity available must be at least 1"),
+  lead_time_days: z.number().min(1, "Lead time must be at least 1 day"),
+  payment_terms: z.enum(["Advance", "Net 30", "Net 45", "Net 60"], {
+    message: "Select valid payment terms",
+  }),
+  valid_until: z.string().min(1, "Valid until date is required"),
+  notes: z.string().optional().nullable(),
+});
+
+export type QuoteInput = z.infer<typeof QuoteSchema>;
+

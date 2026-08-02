@@ -46,6 +46,8 @@ export interface RFQ {
   vendors_contacted: number;
   quotes_received: number;
   created_at: string;
+  attachment_url?: string | null;
+  attachment_name?: string | null;
   deleted_at?: string | null;
 }
 
