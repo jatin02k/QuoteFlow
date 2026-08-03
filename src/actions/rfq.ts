@@ -483,16 +483,36 @@ export async function getCompanyName(): Promise<string> {
   }
 }
 
-export async function sendRFQ(
+export async function dispatchRFQToVendors(
   rfqId: string,
   vendorIds: string[]
-): Promise<ActionResult<{ sent: number; failed: number }>> {
+): Promise<{
+  success: boolean;
+  sentCount: number;
+  failedCount: number;
+  error: string | null;
+}> {
   const { supabase, user } = await getAuthenticatedUser();
-  if (!user || !supabase) return { success: false, error: "Unauthorized" };
+  if (!user || !supabase) {
+    return {
+      success: false,
+      sentCount: 0,
+      failedCount: vendorIds?.length || 0,
+      error: "Failed to send emails to selected vendors.",
+    };
+  }
 
   if (!rfqId || !Array.isArray(vendorIds) || vendorIds.length === 0) {
-    return { success: false, error: "Please select at least one vendor to dispatch RFQ." };
+    return {
+      success: false,
+      sentCount: 0,
+      failedCount: 0,
+      error: "Failed to send emails to selected vendors.",
+    };
   }
+
+  let successCount = 0;
+  let failureCount = 0;
 
   try {
     // 1. Fetch RFQ & verify ownership
@@ -504,8 +524,13 @@ export async function sendRFQ(
       .single();
 
     if (rfqError || !rfq) {
-      console.error("[sendRFQ] RFQ not found or access denied:", rfqError?.message);
-      return { success: false, error: "RFQ not found or access denied." };
+      console.error("[dispatchRFQToVendors] RFQ not found or access denied:", rfqError?.message);
+      return {
+        success: false,
+        sentCount: 0,
+        failedCount: vendorIds.length,
+        error: "Failed to send emails to selected vendors.",
+      };
     }
 
     // 2. Fetch company name
@@ -550,93 +575,128 @@ export async function sendRFQ(
     }
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    let sentCount = 0;
-    let failedCount = 0;
 
     for (const vendorId of vendorIds) {
       if (alreadySentVendorMap.has(vendorId)) {
         continue;
       }
 
-      const { data: vendor, error: vError } = await supabase
-        .from("vendors")
-        .select("*")
-        .eq("id", vendorId)
-        .eq("company_id", user.id)
-        .single();
+      try {
+        const { data: vendor, error: vError } = await supabase
+          .from("vendors")
+          .select("*")
+          .eq("id", vendorId)
+          .eq("company_id", user.id)
+          .single();
 
-      if (vError || !vendor || !vendor.email) {
-        console.error("[sendRFQ] Invalid vendor record for ID:", vendorId, vError?.message);
-        failedCount++;
-        continue;
-      }
+        if (vError || !vendor || !vendor.email) {
+          console.error("[dispatchRFQToVendors] Invalid vendor record for ID:", vendorId, vError?.message);
+          failureCount++;
+          continue;
+        }
 
-      const token = crypto.randomUUID();
-      const responseLink = `${appUrl}/respond/${token}`;
-      const nowIso = new Date().toISOString();
+        const token = crypto.randomUUID();
+        const responseLink = `${appUrl}/respond/${token}`;
+        const nowIso = new Date().toISOString();
 
-      const { error: upsertError } = await supabase
-        .from("rfq_vendors")
-        .upsert(
-          {
-            rfq_id: rfqId,
-            vendor_id: vendorId,
-            token,
-            status: "pending",
-            email_sent_at: nowIso,
-          },
-          { onConflict: "rfq_id,vendor_id" }
-        );
+        // Database upsert
+        const { error: upsertError } = await supabase
+          .from("rfq_vendors")
+          .upsert(
+            {
+              rfq_id: rfqId,
+              vendor_id: vendorId,
+              token,
+              status: "pending",
+              email_sent_at: nowIso,
+            },
+            { onConflict: "rfq_id,vendor_id" }
+          );
 
-      if (upsertError) {
-        console.error("[sendRFQ] Failed upserting rfq_vendors:", upsertError.message);
-        failedCount++;
-        continue;
-      }
+        if (upsertError) {
+          console.error("[dispatchRFQToVendors] Failed upserting rfq_vendors:", upsertError.message);
+          failureCount++;
+          continue;
+        }
 
-      const emailSuccess = await sendRFQEmail({
-        vendorEmail: vendor.email,
-        vendorName: vendor.name,
-        companyName,
-        rfqTitle: rfq.title,
-        parsedData: rfq.parsed_data || {},
-        rawText: rfq.raw_text,
-        attachmentName,
-        attachmentUrl: attachmentSignedUrl,
-        responseLink,
-        deadline: rfq.deadline,
-      });
+        // Resend email call
+        const emailSuccess = await sendRFQEmail({
+          vendorEmail: vendor.email,
+          vendorName: vendor.name,
+          companyName,
+          rfqTitle: rfq.title,
+          parsedData: rfq.parsed_data || {},
+          rawText: rfq.raw_text,
+          attachmentName,
+          attachmentUrl: attachmentSignedUrl,
+          responseLink,
+          deadline: rfq.deadline,
+        });
 
-      if (emailSuccess) {
-        sentCount++;
-      } else {
-        failedCount++;
+        if (emailSuccess) {
+          successCount++;
+        } else {
+          console.error(`[dispatchRFQToVendors] Email dispatch returned false for vendor ID ${vendorId}`);
+          failureCount++;
+        }
+      } catch (vendorErr: any) {
+        console.error(`[dispatchRFQToVendors] Exception during vendor ${vendorId} email dispatch:`, vendorErr?.message || vendorErr);
+        failureCount++;
       }
     }
 
-    const { data: updatedRfqVendors } = await supabase
-      .from("rfq_vendors")
-      .select("id")
-      .eq("rfq_id", rfqId)
-      .not("email_sent_at", "is", null);
+    if (successCount > 0) {
+      const { data: updatedRfqVendors } = await supabase
+        .from("rfq_vendors")
+        .select("id")
+        .eq("rfq_id", rfqId)
+        .not("email_sent_at", "is", null);
 
-    const totalContacted = updatedRfqVendors?.length || (alreadySentVendorMap.size + sentCount);
+      const totalContacted = updatedRfqVendors?.length || (alreadySentVendorMap.size + successCount);
 
-    await supabase
-      .from("rfqs")
-      .update({
-        status: "sent",
-        vendors_contacted: totalContacted,
-      })
-      .eq("id", rfqId);
+      await supabase
+        .from("rfqs")
+        .update({
+          status: "sent",
+          vendors_contacted: totalContacted,
+        })
+        .eq("id", rfqId);
 
-    revalidatePath("/rfqs");
-    revalidatePath(`/rfqs/${rfqId}`);
+      revalidatePath("/rfqs");
+      revalidatePath(`/rfqs/${rfqId}`);
+    }
 
-    return { success: true, data: { sent: sentCount, failed: failedCount } };
+    return {
+      success: successCount > 0,
+      sentCount: successCount,
+      failedCount: failureCount,
+      error: successCount === 0 ? "Failed to send emails to selected vendors." : null,
+    };
   } catch (err: any) {
-    console.error("[sendRFQ] Unexpected error in dispatching RFQ:", err?.message || err);
-    return { success: false, error: "Something went wrong while dispatching RFQ emails." };
+    console.error("[dispatchRFQToVendors] Unexpected error in dispatching RFQ:", err?.message || err);
+    return {
+      success: false,
+      sentCount: successCount,
+      failedCount: failureCount || vendorIds.length,
+      error: "Failed to send emails to selected vendors.",
+    };
   }
+}
+
+export async function sendRFQ(
+  rfqId: string,
+  vendorIds: string[]
+): Promise<ActionResult<{ sent: number; failed: number }>> {
+  const result = await dispatchRFQToVendors(rfqId, vendorIds);
+  if (result.success) {
+    return {
+      success: true,
+      data: { sent: result.sentCount, failed: result.failedCount },
+    };
+  }
+  return {
+    success: false,
+    error: result.error || "Failed to send emails to selected vendors.",
+  };
 }
 
