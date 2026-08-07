@@ -221,7 +221,7 @@ export default function VendorList({ initialVendors }: VendorListProps) {
             </div>
           ) : (
             <div className="border border-border-default bg-bg-base rounded-sm overflow-x-auto shadow-xs">
-              <table className="w-full border-collapse text-left text-sm">
+              <table className="w-full border-collapse text-left text-sm min-w-[600px]">
                 <thead>
                   <tr className="border-b border-border-default bg-bg-surface font-heading text-xs font-bold text-text-secondary uppercase tracking-wider">
                     <th scope="col" className="px-6 py-3.5">Supplier Name</th>

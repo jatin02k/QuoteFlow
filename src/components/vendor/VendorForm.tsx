@@ -131,7 +131,7 @@ export default function VendorForm({
       aria-labelledby="modal-title"
     >
       <div
-        className="w-full max-w-lg bg-bg-base border border-border-strong p-6 shadow-2xl relative animate-in zoom-in-95 slide-in-from-bottom-4 duration-200 rounded-sm"
+        className="w-full max-w-lg max-h-[90vh] overflow-y-auto bg-bg-base border border-border-strong p-4 sm:p-6 shadow-2xl relative animate-in zoom-in-95 slide-in-from-bottom-4 duration-200 rounded-sm"
         style={{ borderRadius: "4px" }}
         onClick={(e) => e.stopPropagation()}
       >

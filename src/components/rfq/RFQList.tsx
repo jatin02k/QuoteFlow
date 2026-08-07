@@ -152,9 +152,11 @@ export default function RFQList({
       setMenuPos(null);
     } else {
       const rect = e.currentTarget.getBoundingClientRect();
+      const rightPos = Math.max(12, window.innerWidth - rect.right);
+      const topPos = Math.min(rect.bottom + 4, window.innerHeight - 180);
       setMenuPos({
-        top: rect.bottom + 4,
-        right: window.innerWidth - rect.right,
+        top: topPos,
+        right: rightPos,
       });
       setOpenMenuId(rfqId);
     }
@@ -618,7 +620,7 @@ export default function RFQList({
             /* Active RFQs Table */
             <div className="bg-bg-surface border border-border-default rounded-sm shadow-xs">
               <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse text-sm">
+                <table className="w-full text-left border-collapse text-sm min-w-[650px]">
                   <thead>
                     <tr className="border-b border-border-default bg-bg-sunken text-[11px] font-heading font-semibold text-text-secondary uppercase tracking-wider">
                       <th className="py-3 px-4 w-32">RFQ ID</th>
