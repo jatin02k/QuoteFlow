@@ -86,8 +86,6 @@ export async function submitQuote(
     const { data: quoteData, error: quoteError } = await adminSupabase
       .from("quotes")
       .insert({
-        rfq_id: rfqVendor.rfq_id,
-        vendor_id: rfqVendor.vendor_id,
         rfq_vendor_id: rfqVendor.id,
         unit_price: result.data.unit_price,
         quantity_available: result.data.quantity_available,
@@ -95,7 +93,6 @@ export async function submitQuote(
         payment_terms: result.data.payment_terms,
         valid_until: result.data.valid_until,
         notes: result.data.notes?.trim() || null,
-        total_cost: totalCost,
       })
       .select("id")
       .single();
@@ -110,7 +107,6 @@ export async function submitQuote(
       .from("rfq_vendors")
       .update({
         status: "submitted",
-        submitted_at: new Date().toISOString(),
       })
       .eq("id", rfqVendor.id);
 

@@ -359,7 +359,14 @@ export async function hardDeleteRFQ(id: string): Promise<ActionResult> {
 
     // 1. Delete child records first to satisfy foreign key constraints
     try {
-      await adminSupabase.from("quotes").delete().eq("rfq_id", id);
+      const { data: rvList } = await adminSupabase
+        .from("rfq_vendors")
+        .select("id")
+        .eq("rfq_id", id);
+      if (rvList && rvList.length > 0) {
+        const rvIds = rvList.map((rv) => rv.id);
+        await adminSupabase.from("quotes").delete().in("rfq_vendor_id", rvIds);
+      }
     } catch (_) {}
     try {
       await adminSupabase.from("rfq_vendors").delete().eq("rfq_id", id);
