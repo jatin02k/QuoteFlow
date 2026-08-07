@@ -1,34 +1,55 @@
+import React from 'react'
 import Link from 'next/link'
-import IndustrialBackground from '@/components/landing/IndustrialBackground'
+import InteractiveDemo from '@/components/landing/InteractiveDemo'
+
+export const metadata = {
+  title: 'RFQPilot // B2B Procure-to-Pay Engine for Indian Manufacturers',
+  description: 'Automate raw material sourcing, dispatch multi-vendor RFQs with single-use tokens, and compare landed costs in unified matrices.',
+}
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen font-body text-[#FFFFFF] antialiased selection:bg-accent selection:text-white">
-      {/* Iron Gray Industrial Background with CAD Gears & Scattered Screws */}
-      <IndustrialBackground />
-
-      {/* 1. NAVBAR - Solid Opaque Bar */}
-      <nav className="border-b border-white/15 bg-[#1E222A] sticky top-0 z-50 shadow-2xl">
-        <div className="w-full px-6 sm:px-12 lg:px-16 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="font-heading font-bold text-xl tracking-tight text-white drop-shadow-md">
+    <div className="min-h-screen bg-bg-base font-body text-text-primary antialiased selection:bg-accent selection:text-white">
+      {/* 1. TOP NAVIGATION BAR */}
+      <nav className="border-b border-border-default bg-bg-base sticky top-0 z-50">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="font-heading font-extrabold text-xl tracking-tight text-text-primary">
               RFQPilot
             </span>
-            <span className="text-[10px] uppercase font-mono tracking-wider bg-white/10 border border-white/20 px-2 py-0.5 rounded-sm text-[#E2E8F0]">
-              v1.0 (Beta)
+            <span className="text-[10px] font-mono uppercase tracking-wider bg-bg-sunken border border-border-default px-2 py-0.5 rounded-sm text-text-secondary">
+              v1.0 // B2B PROCURE-TO-PAY ENGINE
             </span>
           </div>
-          <div className="flex items-center gap-6">
+
+          <div className="flex items-center gap-4 sm:gap-6">
+            <Link
+              href="#how-it-works"
+              className="hidden md:inline-block text-xs font-mono text-text-secondary hover:text-text-primary transition-colors uppercase tracking-wide"
+            >
+              Workflow
+            </Link>
+            <Link
+              href="#matrix-demo"
+              className="hidden md:inline-block text-xs font-mono text-text-secondary hover:text-text-primary transition-colors uppercase tracking-wide"
+            >
+              Live Demo
+            </Link>
+            <Link
+              href="#pricing"
+              className="hidden md:inline-block text-xs font-mono text-text-secondary hover:text-text-primary transition-colors uppercase tracking-wide"
+            >
+              Pricing
+            </Link>
             <Link 
               href="/login" 
-              className="text-sm font-medium text-[#E2E8F0] hover:text-white transition-colors drop-shadow-sm"
+              className="text-xs font-mono text-text-secondary hover:text-text-primary transition-colors border border-border-default hover:border-border-strong px-3 py-1.5 rounded-sm bg-bg-surface"
             >
               Sign In
             </Link>
             <Link 
               href="/login?signup=true" 
-              className="bg-accent hover:bg-accent-hover text-white text-sm font-bold px-4 py-2 rounded-md transition-colors border border-accent-hover shadow-xl"
-              style={{ borderRadius: '6px' }}
+              className="bg-accent hover:bg-accent-hover text-white text-xs font-mono font-bold px-4 py-2 rounded-md transition-colors border border-accent-hover"
             >
               Start Free
             </Link>
@@ -36,351 +57,531 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* 2. HERO SECTION - Full Viewport Height (100vh) & Uncropped Dashboard Image */}
-      <header className="border-b border-white/10 bg-transparent relative overflow-hidden min-h-[calc(100vh-64px)] flex items-center py-8 lg:py-0">
-        <div className="w-full px-6 sm:px-12 lg:px-16">
+      {/* 2. HERO SECTION - Fills 100% of the viewport height below top navbar */}
+      <header className="border-b border-border-default bg-bg-base min-h-[calc(100vh-64px)] flex items-center py-8 lg:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             
-            {/* Left Column: Integrated Hero Core Text */}
-            <div className="lg:col-span-5 text-left space-y-6 z-10">
-              <span className="text-xs uppercase font-heading font-bold tracking-widest text-[#F59E0B] block drop-shadow-[0_2px_10px_rgba(0,0,0,1)]">
-                B2B Procurement Automation
-              </span>
+            {/* Left Column: Hero Text & Call to Actions */}
+            <div className="lg:col-span-6 space-y-5">
+              <div>
+                <span className="font-mono text-xs font-bold text-accent uppercase tracking-wider bg-accent-light border border-accent-border px-3 py-1 rounded-sm inline-block mb-3">
+                  INDUSTRIAL B2B PROCUREMENT ENGINE
+                </span>
+                <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-text-primary leading-[1.15]">
+                  Streamline Raw Material RFQs. <br />
+                  Compare Vendor Quotes in Minutes.
+                </h1>
+              </div>
 
-              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.15] drop-shadow-[0_4px_24px_rgba(0,0,0,0.95)]">
-                Vendor quotes. <br />
-                Compared. In minutes.
-              </h1>
-
-              <p className="text-base sm:text-lg text-[#E2E8F0] font-body leading-relaxed max-w-xl font-normal drop-shadow-[0_2px_16px_rgba(0,0,0,0.95)]">
-                Stop managing RFQs over email and Excel. Upload your requirement once, dispatch to all vendors in one click, and see quotes auto-generate into a unified dashboard.
+              <p className="text-sm sm:text-base text-text-secondary leading-relaxed font-normal">
+                Replace endless email chains, WhatsApp messages, and manual Excel data entry. Upload your engineering spec once, dispatch to 30+ suppliers via passwordless token links, and evaluate side-by-side total landed cost matrices automatically.
               </p>
 
-              {/* Action Button & Plan Subtext */}
-              <div className="pt-2 space-y-4">
-                <div>
+              {/* Action Buttons */}
+              <div className="space-y-3 pt-2">
+                <div className="flex flex-wrap items-center gap-3">
                   <Link 
                     href="/login?signup=true" 
-                    className="inline-block bg-accent hover:bg-accent-hover text-white text-base sm:text-lg font-bold px-8 py-4 rounded-md border border-accent-hover transition-colors shadow-2xl text-center"
-                    style={{ borderRadius: '6px' }}
+                    className="bg-accent hover:bg-accent-hover text-white text-sm sm:text-base font-bold px-6 py-3 rounded-md border border-accent-hover transition-colors"
                   >
-                    Start Free — No Credit Card Required
+                    Start Free — 3 RFQs Included
+                  </Link>
+                  <Link 
+                    href="#matrix-demo" 
+                    className="bg-bg-surface hover:bg-bg-sunken text-text-primary text-sm sm:text-base font-medium px-6 py-3 rounded-md border border-border-strong transition-colors"
+                  >
+                    View Live Matrix
                   </Link>
                 </div>
-                
-                <div className="pt-1">
-                  <span className="text-xs font-mono text-[#CBD5E1] bg-[#1E222A]/90 px-4 py-2 rounded border border-[#475569] shadow-lg inline-block">
-                    Free plan includes 3 RFQs/month • Max 10 vendors
-                  </span>
+
+                <div className="flex items-center gap-2 text-xs font-mono text-text-muted pt-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-status-success inline-block"></span>
+                  <span>No credit card required</span>
+                  <span>•</span>
+                  <span>Zero supplier login friction</span>
+                  <span>•</span>
+                  <span>Made for Indian SMEs</span>
+                </div>
+              </div>
+
+              {/* Key Quick Stats */}
+              <div className="grid grid-cols-3 gap-4 pt-4 border-t border-border-subtle font-mono text-xs">
+                <div>
+                  <span className="block text-text-muted text-[10px] uppercase">AVG TIME SAVED</span>
+                  <span className="font-bold text-text-primary text-sm sm:text-base">85% Faster</span>
+                </div>
+                <div>
+                  <span className="block text-text-muted text-[10px] uppercase">SUPPLIER ACCESS</span>
+                  <span className="font-bold text-text-primary text-sm sm:text-base">0 Passwords</span>
+                </div>
+                <div>
+                  <span className="block text-text-muted text-[10px] uppercase">LANDED COST MATH</span>
+                  <span className="font-bold text-text-primary text-sm sm:text-base">100% Auto</span>
                 </div>
               </div>
             </div>
 
-            {/* Right Side Image: Fully Visible, Uncropped Dashboard Screenshot */}
-            <div className="lg:col-span-7 w-full flex items-center justify-end z-10">
-              <div className="w-full max-w-3xl bg-[#1E222A]/90 p-2 sm:p-3 border border-[#475569] rounded-xl shadow-2xl">
-                <img
-                  src="/hero-dashboard.png"
-                  alt="RFQPilot Live Vendor Quote Comparison Dashboard"
-                  className="w-full h-auto max-h-[78vh] object-contain rounded-lg border border-[#334155]"
-                />
-              </div>
+            {/* Right Side: Interactive Technical System Preview */}
+            <div id="matrix-demo" className="lg:col-span-6 w-full">
+              <InteractiveDemo />
             </div>
 
           </div>
         </div>
       </header>
 
-      {/* 3. HOW IT WORKS */}
-      <section className="py-20 border-b border-white/10 bg-transparent">
+      {/* 3. OPERATIONAL REALITY COMPARISON (BEFORE vs AFTER) */}
+      <section className="py-16 border-b border-border-default bg-bg-surface">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <span className="text-xs uppercase font-heading font-bold tracking-widest text-[#F59E0B] mb-2 block drop-shadow-md">
-              Workflow Engine
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <span className="font-mono text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">
+              OPERATIONAL COMPARISON
             </span>
-            <h2 className="font-heading text-3xl font-extrabold text-white drop-shadow-lg">
-              How RFQPilot Automates Your RFQ Cycle
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-text-primary">
+              Built for Factory Owners & Procurement Heads
             </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Step 1 */}
-            <div className="border border-[#475569] hover:border-accent/60 p-6 bg-[#1E222A]/80 backdrop-blur-xs shadow-2xl transition-all flex flex-col justify-between" style={{ borderRadius: '6px' }}>
-              <div>
-                <span className="font-mono text-sm text-[#F59E0B] font-bold block mb-4 drop-shadow-sm">STEP 01 // PARSE</span>
-                <h3 className="font-heading text-xl font-bold text-white mb-3 drop-shadow-md">
-                  1. Upload your requirement
-                </h3>
-                <p className="text-sm text-[#E2E8F0] leading-relaxed drop-shadow-sm">
-                  Paste raw requirement text or upload a drawing PDF. Our built-in AI model parses it instantly into product lines, quantities, and strict technical specs.
-                </p>
-              </div>
-            </div>
-
-            {/* Step 2 */}
-            <div className="border border-[#475569] hover:border-accent/60 p-6 bg-[#1E222A]/80 backdrop-blur-xs shadow-2xl transition-all flex flex-col justify-between" style={{ borderRadius: '6px' }}>
-              <div>
-                <span className="font-mono text-sm text-[#F59E0B] font-bold block mb-4 drop-shadow-sm">STEP 02 // DISPATCH</span>
-                <h3 className="font-heading text-xl font-bold text-white mb-3 drop-shadow-md">
-                  2. We email all your vendors
-                </h3>
-                <p className="text-sm text-[#E2E8F0] leading-relaxed drop-shadow-sm">
-                  Select matching vendors from your directory. We send professional emails containing unique, secure quote-submission links that bypass login barriers.
-                </p>
-              </div>
-            </div>
-
-            {/* Step 3 */}
-            <div className="border border-[#475569] hover:border-accent/60 p-6 bg-[#1E222A]/80 backdrop-blur-xs shadow-2xl transition-all flex flex-col justify-between" style={{ borderRadius: '6px' }}>
-              <div>
-                <span className="font-mono text-sm text-[#F59E0B] font-bold block mb-4 drop-shadow-sm">STEP 03 // COMPARE</span>
-                <h3 className="font-heading text-xl font-bold text-white mb-3 drop-shadow-md">
-                  3. Compare quotes in one table
-                </h3>
-                <p className="text-sm text-[#E2E8F0] leading-relaxed drop-shadow-sm">
-                  As suppliers fill quotes on their phones or laptops, RFQPilot calculates total costs and organizes them into a clean matrix, auto-highlighting optimal matches.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. PROBLEM SECTION */}
-      <section className="py-20 border-b border-white/10 bg-transparent">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <span className="text-xs uppercase font-heading font-bold tracking-widest text-status-warning mb-2 block drop-shadow-md">
-              Operational Realities
-            </span>
-            <h2 className="font-heading text-3xl font-extrabold text-white drop-shadow-lg">
-              Still doing this the hard way?
-            </h2>
+            <p className="text-sm text-text-secondary mt-2">
+              Designed specifically for metal fabricators, auto component units, plastic molders, and machinery builders in Noida, Pune, Ludhiana, Rajkot & Gujarat.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-            {/* The Old Way */}
-            <div className="border border-status-error/50 bg-[#1E222A]/80 backdrop-blur-xs p-8 flex flex-col justify-between shadow-2xl" style={{ borderRadius: '6px' }}>
+            {/* The Manual Way */}
+            <div className="bg-status-error-bg/30 border border-status-error/40 rounded-md p-6 sm:p-8 flex flex-col justify-between space-y-6">
               <div>
-                <div className="flex items-center justify-between pb-4 border-b border-white/15 mb-6">
-                  <h3 className="font-heading text-lg font-extrabold text-status-error uppercase tracking-wider drop-shadow-sm">
-                    The Old Way
+                <div className="flex items-center justify-between pb-4 border-b border-status-error/30 mb-5">
+                  <h3 className="font-heading text-base font-bold text-status-error uppercase tracking-wider flex items-center gap-2">
+                    <span>The Manual RFQ Chaos</span>
                   </h3>
-                  <span className="text-xs font-mono text-status-error bg-status-error-bg/40 px-2.5 py-1 rounded-sm border border-status-error/50 font-bold">
-                    3 Days Wasted
+                  <span className="text-[11px] font-mono text-status-error bg-status-error-bg px-2.5 py-0.5 rounded-sm border border-status-error/40 font-bold">
+                    3 DAYS WASTED PER RFQ
                   </span>
                 </div>
-                <ul className="space-y-4">
-                  <li className="flex items-start gap-3">
-                    <svg className="w-5 h-5 text-status-error shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    <span className="text-sm text-[#E2E8F0] font-medium drop-shadow-sm">Emailing 20-30 suppliers one by one with heavy attachments.</span>
+
+                <ul className="space-y-3.5 text-xs sm:text-sm text-text-secondary font-body">
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-status-error font-bold font-mono mt-0.5">✕</span>
+                    <span>Emailing 20–30 vendors individually with heavy drawing PDF attachments.</span>
                   </li>
-                  <li className="flex items-start gap-3">
-                    <svg className="w-5 h-5 text-status-error shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    <span className="text-sm text-[#E2E8F0] font-medium drop-shadow-sm">Sifting through WhatsApp threads and scattered inbox replies.</span>
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-status-error font-bold font-mono mt-0.5">✕</span>
+                    <span>Sifting through messy WhatsApp threads and phone notes to find quote prices.</span>
                   </li>
-                  <li className="flex items-start gap-3">
-                    <svg className="w-5 h-5 text-status-error shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    <span className="text-sm text-[#E2E8F0] font-medium drop-shadow-sm">Copy-pasting prices, lead times, and terms manually into Excel.</span>
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-status-error font-bold font-mono mt-0.5">✕</span>
+                    <span>Manually copy-pasting unit rates, lead times, and payment terms into Excel.</span>
                   </li>
-                  <li className="flex items-start gap-3">
-                    <svg className="w-5 h-5 text-status-error shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    <span className="text-sm text-[#E2E8F0] font-medium drop-shadow-sm">No historical data logs; pricing trends are locked in old spreadsheets.</span>
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-status-error font-bold font-mono mt-0.5">✕</span>
+                    <span>Zero historical price audit trail; losing negotiation leverage with raw material suppliers.</span>
                   </li>
                 </ul>
               </div>
-              <div className="mt-8 pt-6 border-t border-white/15 bg-transparent -mx-8 -mb-8 p-6 text-center" style={{ borderBottomLeftRadius: '6px', borderBottomRightRadius: '6px' }}>
-                <span className="text-xs font-mono text-[#E2E8F0] drop-shadow-sm">RESULT: High friction, delayed orders, lost negotiation leverage.</span>
+
+              <div className="pt-4 border-t border-status-error/30 text-xs font-mono text-status-error font-bold">
+                RESULT: Delayed production schedules & hidden margin leakage.
               </div>
             </div>
 
             {/* The RFQPilot Way */}
-            <div className="border-2 border-accent bg-[#1E222A]/80 backdrop-blur-xs p-8 flex flex-col justify-between shadow-2xl" style={{ borderRadius: '6px' }}>
+            <div className="bg-accent-light border-2 border-accent rounded-md p-6 sm:p-8 flex flex-col justify-between space-y-6">
               <div>
-                <div className="flex items-center justify-between pb-4 border-b border-white/15 mb-6">
-                  <h3 className="font-heading text-lg font-extrabold text-[#F59E0B] uppercase tracking-wider drop-shadow-sm">
-                    With RFQPilot
+                <div className="flex items-center justify-between pb-4 border-b border-accent-border mb-5">
+                  <h3 className="font-heading text-base font-bold text-accent uppercase tracking-wider flex items-center gap-2">
+                    <span>With RFQPilot Engine</span>
                   </h3>
-                  <span className="text-xs font-mono text-status-success bg-status-success-bg/40 px-2.5 py-1 rounded-sm border border-status-success/50 font-bold">
-                    20 Minutes Total
+                  <span className="text-[11px] font-mono text-status-success bg-status-success-bg px-2.5 py-0.5 rounded-sm border border-status-success/40 font-bold">
+                    20 MINUTES TOTAL
                   </span>
                 </div>
-                <ul className="space-y-4">
-                  <li className="flex items-start gap-3">
-                    <svg className="w-5 h-5 text-status-success shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-sm text-white font-semibold drop-shadow-sm">Single upload; requirements parsed and structured instantly.</span>
+
+                <ul className="space-y-3.5 text-xs sm:text-sm text-text-primary font-body">
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-status-success font-bold font-mono mt-0.5">✓</span>
+                    <span className="font-semibold">Single upload:</span> AI parses specifications into structured product line items automatically.
                   </li>
-                  <li className="flex items-start gap-3">
-                    <svg className="w-5 h-5 text-status-success shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-sm text-white font-semibold drop-shadow-sm">One-click broadcast reaches 30+ vendors on email and mobile.</span>
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-status-success font-bold font-mono mt-0.5">✓</span>
+                    <span className="font-semibold">1-Click Token Broadcast:</span> Emails passwordless access links directly to targeted suppliers.
                   </li>
-                  <li className="flex items-start gap-3">
-                    <svg className="w-5 h-5 text-status-success shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-sm text-white font-semibold drop-shadow-sm">Unified dashboard automatically highlights lowest unit costs.</span>
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-status-success font-bold font-mono mt-0.5">✓</span>
+                    <span className="font-semibold">Side-by-Side Matrix:</span> Computes Total Cost = Unit Price × Quantity and highlights optimal options.
                   </li>
-                  <li className="flex items-start gap-3">
-                    <svg className="w-5 h-5 text-status-success shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-sm text-white font-semibold drop-shadow-sm">Auto follow-ups nag non-responders while you focus on production.</span>
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-status-success font-bold font-mono mt-0.5">✓</span>
+                    <span className="font-semibold">Automated Reminders:</span> Follows up with pending suppliers while your plant stays focused on production.
                   </li>
                 </ul>
               </div>
-              <div className="mt-8 pt-6 border-t border-accent/40 bg-transparent -mx-8 -mb-8 p-6 text-center" style={{ borderBottomLeftRadius: '6px', borderBottomRightRadius: '6px' }}>
-                <span className="text-xs font-mono text-[#F59E0B] font-bold drop-shadow-sm">RESULT: Maximized margins, clear supplier audit logs.</span>
+
+              <div className="pt-4 border-t border-accent-border text-xs font-mono text-accent font-bold">
+                RESULT: Maximized procurement margins & full audit accountability.
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 5. PRICING SECTION */}
-      <section className="py-20 border-b border-white/10 bg-transparent">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <span className="text-xs uppercase font-heading font-bold tracking-widest text-[#F59E0B] mb-2 block drop-shadow-md">
-              Transparent Pricing
+      {/* 4. HOW IT WORKS (3-STEP WORKFLOW ENGINE) */}
+      <section id="how-it-works" className="py-16 border-b border-border-default bg-bg-base">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <span className="font-mono text-xs font-bold text-accent uppercase tracking-wider block mb-1">
+              WORKFLOW ARCHITECTURE
             </span>
-            <h2 className="font-heading text-3xl font-extrabold text-white drop-shadow-lg">
-              Simple plans for growing factories
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-text-primary">
+              How RFQPilot Automates Your Procurement Cycle
             </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Step 1 */}
+            <div className="bg-bg-surface border border-border-default p-6 rounded-md space-y-4 hover:border-border-strong transition-colors">
+              <div className="flex items-center justify-between border-b border-border-subtle pb-3">
+                <span className="font-mono text-xs font-bold text-accent">STEP 01 // PARSE</span>
+                <span className="font-mono text-[10px] bg-bg-sunken border border-border-default px-2 py-0.5 rounded-sm text-text-muted">
+                  INTAKE
+                </span>
+              </div>
+              <h3 className="font-heading font-bold text-lg text-text-primary">
+                1. Upload Requirement
+              </h3>
+              <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-body">
+                Paste raw requirement text or upload a drawing PDF. The built-in AI parser extracts product categories, quantities, unit specs, and target lead times into clean line items.
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="bg-bg-surface border border-border-default p-6 rounded-md space-y-4 hover:border-border-strong transition-colors">
+              <div className="flex items-center justify-between border-b border-border-subtle pb-3">
+                <span className="font-mono text-xs font-bold text-accent">STEP 02 // DISPATCH</span>
+                <span className="font-mono text-[10px] bg-bg-sunken border border-border-default px-2 py-0.5 rounded-sm text-text-muted">
+                  TOKEN LINKS
+                </span>
+              </div>
+              <h3 className="font-heading font-bold text-lg text-text-primary">
+                2. Passwordless Vendor Dispatch
+              </h3>
+              <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-body">
+                Select targeted suppliers from your directory. RFQPilot dispatches professional emails with isolated token links. Suppliers submit prices directly on mobile or desktop without logging in.
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="bg-bg-surface border border-border-default p-6 rounded-md space-y-4 hover:border-border-strong transition-colors">
+              <div className="flex items-center justify-between border-b border-border-subtle pb-3">
+                <span className="font-mono text-xs font-bold text-accent">STEP 03 // COMPARE</span>
+                <span className="font-mono text-[10px] bg-bg-sunken border border-border-default px-2 py-0.5 rounded-sm text-text-muted">
+                  LANDED COST
+                </span>
+              </div>
+              <h3 className="font-heading font-bold text-lg text-text-primary">
+                3. Compare Total Landed Costs
+              </h3>
+              <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-body">
+                As supplier responses arrive, RFQPilot automatically calculates total order values, formats payment terms (Advance, Net 30, Net 45, Net 60), and highlights the optimal supplier option.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. INDUSTRIAL FEATURES GRID */}
+      <section className="py-16 border-b border-border-default bg-bg-surface">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <span className="font-mono text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">
+              SYSTEM CAPABILITIES
+            </span>
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-text-primary">
+              Engineered for Industrial Hardware Precision
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="bg-bg-base border border-border-default p-5 rounded-md space-y-2">
+              <div className="font-mono text-xs text-accent font-bold">01 // ZERO SUPPLIER FRICTION</div>
+              <h4 className="font-heading font-bold text-base text-text-primary">Passwordless Quote Forms</h4>
+              <p className="text-xs text-text-secondary leading-relaxed font-body">
+                Suppliers respond in under 60 seconds via secure token links on WhatsApp or email. No account creation needed.
+              </p>
+            </div>
+
+            <div className="bg-bg-base border border-border-default p-5 rounded-md space-y-2">
+              <div className="font-mono text-xs text-accent font-bold">02 // SECURE ISOLATION</div>
+              <div className="font-heading font-bold text-base text-text-primary">Multi-Tenant Vendor Safety</div>
+              <p className="text-xs text-text-secondary leading-relaxed font-body">
+                Strict data isolation ensures competing suppliers never see each other's quotes or identities.
+              </p>
+            </div>
+
+            <div className="bg-bg-base border border-border-default p-5 rounded-md space-y-2">
+              <div className="font-mono text-xs text-accent font-bold">03 // LANDED COST CALCULATOR</div>
+              <div className="font-heading font-bold text-base text-text-primary">Total Price & Terms Math</div>
+              <p className="text-xs text-text-secondary leading-relaxed font-body">
+                Automatically calculates order totals (`Unit Rate × Quantity`) alongside credit terms (`Advance`, `Net 30`, `Net 45`, `Net 60`).
+              </p>
+            </div>
+
+            <div className="bg-bg-base border border-border-default p-5 rounded-md space-y-2">
+              <div className="font-mono text-xs text-accent font-bold">04 // CATEGORY DIRECTORY</div>
+              <div className="font-heading font-bold text-base text-text-primary">Manufacturing Vendor Profiles</div>
+              <p className="text-xs text-text-secondary leading-relaxed font-body">
+                Tag suppliers by operational category: Raw Material, Electrical, Components, Chemical, Machinery, Packaging.
+              </p>
+            </div>
+
+            <div className="bg-bg-base border border-border-default p-5 rounded-md space-y-2">
+              <div className="font-mono text-xs text-accent font-bold">05 // FOLLOW-UP TRIGGERS</div>
+              <div className="font-heading font-bold text-base text-text-primary">Automated Reminders</div>
+              <p className="text-xs text-text-secondary leading-relaxed font-body">
+                System automatically sends subtle reminder triggers to vendors who haven't responded within 24–48 hours.
+              </p>
+            </div>
+
+            <div className="bg-bg-base border border-border-default p-5 rounded-md space-y-2">
+              <div className="font-mono text-xs text-accent font-bold">06 // AUDIT ARCHIVE</div>
+              <div className="font-heading font-bold text-base text-text-primary">Historical Quotation Logs</div>
+              <p className="text-xs text-text-secondary leading-relaxed font-body">
+                Access past supplier quotes anytime to track raw material price fluctuations and leverage annual contract renewals.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. TRANSPARENT PRICING TIERS */}
+      <section id="pricing" className="py-16 border-b border-border-default bg-bg-base">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <span className="font-mono text-xs font-bold text-accent uppercase tracking-wider block mb-1">
+              TRANSPARENT PRICING
+            </span>
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-text-primary">
+              Simple Plans for Growing Indian Factories
+            </h2>
+            <p className="text-xs sm:text-sm text-text-secondary mt-1">
+              No hidden fees. Start free and upgrade when your procurement volume scales.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
             {/* Free Tier */}
-            <div className="border border-[#475569] hover:border-white/40 bg-[#1E222A]/80 backdrop-blur-xs p-8 flex flex-col justify-between shadow-2xl" style={{ borderRadius: '6px' }}>
+            <div className="bg-bg-surface border border-border-default p-6 sm:p-8 rounded-md flex flex-col justify-between space-y-6">
               <div>
-                <div className="mb-6">
-                  <h3 className="font-heading text-lg font-bold text-[#E2E8F0] uppercase tracking-wider drop-shadow-sm">Free</h3>
-                  <div className="mt-2 flex items-baseline">
-                    <span className="font-mono text-4xl font-extrabold tracking-tight text-white drop-shadow-md">₹0</span>
-                    <span className="ml-1 text-sm text-[#E2E8F0]/80">/ forever</span>
+                <div className="mb-6 pb-6 border-b border-border-subtle">
+                  <h3 className="font-heading font-bold text-base text-text-primary uppercase tracking-wider">Free Plan</h3>
+                  <div className="mt-3 flex items-baseline gap-1">
+                    <span className="font-mono text-4xl font-extrabold text-text-primary">₹0</span>
+                    <span className="text-xs text-text-muted font-mono">/ forever</span>
                   </div>
-                  <p className="text-xs text-[#E2E8F0]/70 mt-2 font-mono">Suitable for testing or basic purchasing cycles</p>
+                  <p className="text-xs text-text-secondary mt-2 font-mono">Ideal for testing or initial purchasing runs</p>
                 </div>
-                
-                <ul className="space-y-3 pt-6 border-t border-white/15">
-                  <li className="flex items-center gap-2.5 text-sm text-[#E2E8F0]">
-                    <span className="w-1.5 h-1.5 bg-white/60 rounded-full"></span>
-                    <span>3 RFQs per month</span>
+
+                <ul className="space-y-3 text-xs sm:text-sm text-text-secondary font-body">
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-border-strong"></span>
+                    <span>3 Active RFQ Dispatches / month</span>
                   </li>
-                  <li className="flex items-center gap-2.5 text-sm text-[#E2E8F0]">
-                    <span className="w-1.5 h-1.5 bg-white/60 rounded-full"></span>
-                    <span>Up to 10 active vendors</span>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-border-strong"></span>
+                    <span>Up to 10 Vendors in Directory</span>
                   </li>
-                  <li className="flex items-center gap-2.5 text-sm text-[#E2E8F0]">
-                    <span className="w-1.5 h-1.5 bg-white/60 rounded-full"></span>
-                    <span>Standard comparison matrix</span>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-border-strong"></span>
+                    <span>Full Comparison Matrix Engine</span>
                   </li>
-                  <li className="flex items-center gap-2.5 text-sm text-[#E2E8F0]">
-                    <span className="w-1.5 h-1.5 bg-white/60 rounded-full"></span>
-                    <span>Email dispatch notifications</span>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-border-strong"></span>
+                    <span>Passwordless Token Link Dispatches</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="mt-8">
+              <div>
                 <Link 
                   href="/login?signup=true" 
-                  className="block w-full text-center bg-white/10 hover:bg-white/20 text-white font-bold py-3 border border-white/20 transition-colors shadow-md"
-                  style={{ borderRadius: '6px' }}
+                  className="block w-full text-center bg-bg-base hover:bg-bg-sunken text-text-primary font-mono text-xs font-bold py-3 border border-border-strong rounded-md transition-colors"
                 >
-                  Start Free
+                  Start Free Account
                 </Link>
               </div>
             </div>
 
             {/* Pro Tier */}
-            <div className="border-2 border-accent bg-[#1E222A]/80 backdrop-blur-xs p-8 flex flex-col justify-between relative shadow-2xl" style={{ borderRadius: '6px' }}>
-              <div className="absolute top-0 right-8 transform -translate-y-1/2 bg-accent text-white px-3 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded-sm font-bold border border-accent-hover shadow-md">
-                Recommended
+            <div className="bg-accent-light border-2 border-accent p-6 sm:p-8 rounded-md flex flex-col justify-between space-y-6 relative">
+              <div className="absolute -top-3 right-6 bg-accent text-white px-3 py-0.5 text-[10px] font-mono uppercase tracking-wider rounded-sm font-bold border border-accent-hover">
+                RECOMMENDED FOR FACTORIES
               </div>
+
               <div>
-                <div className="mb-6">
-                  <h3 className="font-heading text-lg font-bold text-[#F59E0B] uppercase tracking-wider drop-shadow-sm">Pro</h3>
-                  <div className="mt-2 flex items-baseline">
-                    <span className="font-mono text-4xl font-extrabold tracking-tight text-white drop-shadow-md">₹xxx</span>
-                    <span className="ml-1 text-sm text-[#E2E8F0]/80">/ month</span>
+                <div className="mb-6 pb-6 border-b border-accent-border">
+                  <h3 className="font-heading font-bold text-base text-accent uppercase tracking-wider">Pro Plan</h3>
+                  <div className="mt-3 flex items-baseline gap-1">
+                    <span className="font-mono text-4xl font-extrabold text-text-primary">₹1,999</span>
+                    <span className="text-xs text-text-muted font-mono">/ month</span>
                   </div>
-                  <p className="text-xs text-[#E2E8F0]/70 mt-2 font-mono">For factories running weekly procurement cycles</p>
+                  <p className="text-xs text-text-secondary mt-2 font-mono">For plants running weekly procurement cycles</p>
                 </div>
-                
-                <ul className="space-y-3 pt-6 border-t border-white/15">
-                  <li className="flex items-center gap-2.5 text-sm text-[#E2E8F0]">
-                    <span className="w-1.5 h-1.5 bg-[#F59E0B] rounded-full"></span>
-                    <span className="font-bold text-white">Unlimited RFQ dispatches</span>
+
+                <ul className="space-y-3 text-xs sm:text-sm text-text-primary font-body">
+                  <li className="flex items-center gap-2 font-semibold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent"></span>
+                    <span>Unlimited RFQs & Vendor Dispatches</span>
                   </li>
-                  <li className="flex items-center gap-2.5 text-sm text-[#E2E8F0]">
-                    <span className="w-1.5 h-1.5 bg-[#F59E0B] rounded-full"></span>
-                    <span className="font-bold text-white">Unlimited vendor directory</span>
+                  <li className="flex items-center gap-2 font-semibold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent"></span>
+                    <span>Unlimited Vendor Directory Management</span>
                   </li>
-                  <li className="flex items-center gap-2.5 text-sm text-[#E2E8F0]">
-                    <span className="w-1.5 h-1.5 bg-[#F59E0B] rounded-full"></span>
-                    <span>AI parsing (PDF & unstructured text)</span>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent"></span>
+                    <span>AI Drawing PDF & Text Specification Parsing</span>
                   </li>
-                  <li className="flex items-center gap-2.5 text-sm text-[#E2E8F0]">
-                    <span className="w-1.5 h-1.5 bg-[#F59E0B] rounded-full"></span>
-                    <span>AI-powered vendor match recommendations</span>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent"></span>
+                    <span>Gemini AI Vendor Match Recommendations</span>
                   </li>
-                  <li className="flex items-center gap-2.5 text-sm text-[#E2E8F0]">
-                    <span className="w-1.5 h-1.5 bg-[#F59E0B] rounded-full"></span>
-                    <span>Automated follow-ups (48h reminder triggers)</span>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent"></span>
+                    <span>Automated Vendor Follow-up Reminders</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="mt-8">
+              <div>
                 <Link 
                   href="/login?signup=true&plan=pro" 
-                  className="block w-full text-center bg-accent hover:bg-accent-hover text-white font-bold py-3 border border-accent-hover transition-colors shadow-lg"
-                  style={{ borderRadius: '6px' }}
+                  className="block w-full text-center bg-accent hover:bg-accent-hover text-white font-mono text-xs font-bold py-3 border border-accent-hover rounded-md transition-colors"
                 >
-                  Upgrade to Pro
+                  Upgrade to Pro Tier
                 </Link>
               </div>
             </div>
           </div>
 
-          <div className="mt-8 p-4 border border-white/20 bg-[#1E222A]/80 text-center shadow-lg" style={{ borderRadius: '6px' }}>
-            <span className="text-xs sm:text-sm text-[#E2E8F0] font-body">
-              ⚡ <strong>Founding Member Discount:</strong> Get Pro for only <strong>₹xxx/month</strong>. Limited to the first 10 customers. Locked in forever.
-            </span>
+          {/* Founding Callout */}
+          <div className="mt-8 p-4 bg-bg-surface border border-border-default rounded-md text-center text-xs font-mono text-text-secondary">
+            ⚡ <strong className="text-text-primary">Founding Tier Offer:</strong> First 10 Indian manufacturing units lock in Pro features at <strong className="text-accent">₹999/month</strong> forever.
           </div>
         </div>
       </section>
 
-      {/* 6. FOOTER */}
-      <footer className="bg-[#1E222A] border-t border-white/15 py-12 relative z-10 shadow-2xl">
+      {/* 7. FREQUENTLY ASKED QUESTIONS */}
+      <section className="py-16 border-b border-border-default bg-bg-surface">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <span className="font-mono text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">
+              SECURITY & FREQUENTLY ASKED QUESTIONS
+            </span>
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-text-primary">
+              Frequently Asked Questions
+            </h2>
+          </div>
+
+          <div className="space-y-4">
+            <div className="bg-bg-base border border-border-default p-5 rounded-md space-y-2">
+              <h4 className="font-heading font-bold text-sm sm:text-base text-text-primary flex items-center gap-2">
+                <span className="text-accent font-mono">Q.</span>
+                <span>Do our vendors need to create an account or install software?</span>
+              </h4>
+              <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-body pl-5">
+                No. Vendors receive a single-use token URL via email. They open the link on mobile or desktop and submit unit rates, lead times, and payment terms in seconds without any account setup.
+              </p>
+            </div>
+
+            <div className="bg-bg-base border border-border-default p-5 rounded-md space-y-2">
+              <h4 className="font-heading font-bold text-sm sm:text-base text-text-primary flex items-center gap-2">
+                <span className="text-accent font-mono">Q.</span>
+                <span>Can competing suppliers see each other's quotes or identities?</span>
+              </h4>
+              <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-body pl-5">
+                Never. RFQPilot enforces strict multi-tenant supplier isolation. Each token link is isolated so suppliers only see the items requested and can never access competitor identities or pricing.
+              </p>
+            </div>
+
+            <div className="bg-bg-base border border-border-default p-5 rounded-md space-y-2">
+              <h4 className="font-heading font-bold text-sm sm:text-base text-text-primary flex items-center gap-2">
+                <span className="text-accent font-mono">Q.</span>
+                <span>How does the AI PDF & engineering spec parser work?</span>
+              </h4>
+              <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-body pl-5">
+                Our embedded Gemini AI parses raw text, table rows, and drawing PDFs to extract part numbers, raw materials (e.g. SS 304, MS Plate, Brass), quantities, and target lead times automatically.
+              </p>
+            </div>
+
+            <div className="bg-bg-base border border-border-default p-5 rounded-md space-y-2">
+              <h4 className="font-heading font-bold text-sm sm:text-base text-text-primary flex items-center gap-2">
+                <span className="text-accent font-mono">Q.</span>
+                <span>How is landed cost calculated across different payment terms?</span>
+              </h4>
+              <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-body pl-5">
+                RFQPilot scales unit pricing by requested RFQ quantities (`Total Cost = Unit Rate × Quantity`) and displays payment terms (`Advance`, `Net 30`, `Net 45`, `Net 60`) side-by-side for quick financial comparison.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. CALL TO ACTION BANNER */}
+      <section className="py-16 bg-bg-base border-b border-border-default">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+          <div className="bg-bg-sunken border border-border-strong p-8 sm:p-12 rounded-md space-y-6">
+            <span className="font-mono text-xs font-bold text-accent uppercase tracking-wider bg-accent-light border border-accent-border px-3 py-1 rounded-sm inline-block">
+              READY TO DISPATCH YOUR NEXT RFQ?
+            </span>
+            <h2 className="font-heading text-2xl sm:text-3xl font-extrabold text-text-primary">
+              Eliminate Manual RFQ Friction Today
+            </h2>
+            <p className="text-xs sm:text-sm text-text-secondary max-w-xl mx-auto">
+              Join Indian manufacturing teams in Noida, Pune, Ludhiana, and Rajkot saving hours on every raw material procurement cycle.
+            </p>
+
+            <div>
+              <Link 
+                href="/login?signup=true" 
+                className="inline-block bg-accent hover:bg-accent-hover text-white text-sm sm:text-base font-mono font-bold px-8 py-3.5 rounded-md border border-accent-hover transition-colors"
+              >
+                Create Free Account — Start Instantly
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 9. FOOTER */}
+      <footer className="bg-bg-sunken border-t border-border-default py-10 text-xs font-mono">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="text-center md:text-left">
-            <span className="font-heading font-bold text-lg tracking-tight text-white drop-shadow-sm">
+          <div className="text-center md:text-left space-y-1">
+            <span className="font-heading font-extrabold text-base text-text-primary tracking-tight">
               RFQPilot
             </span>
-            <p className="text-xs text-[#E2E8F0] mt-1 font-body">
-              An RFQ Engine Built for Indian Manufacturers.
+            <p className="text-text-muted font-body text-xs">
+              Industrial Procure-to-Pay Engine for Indian SME Manufacturers
             </p>
           </div>
-          <div className="text-center md:text-right">
-            <span className="text-xs font-mono text-[#E2E8F0]/80">
-              Made in Noida, India.
-            </span>
-            <p className="text-[10px] text-[#E2E8F0]/60 mt-1 font-mono">
+
+          <div className="flex flex-wrap items-center justify-center gap-6 text-text-secondary">
+            <Link href="#how-it-works" className="hover:text-text-primary transition-colors">
+              Workflow
+            </Link>
+            <Link href="#matrix-demo" className="hover:text-text-primary transition-colors">
+              Live Demo
+            </Link>
+            <Link href="#pricing" className="hover:text-text-primary transition-colors">
+              Pricing
+            </Link>
+            <Link href="/login" className="hover:text-text-primary transition-colors">
+              Sign In
+            </Link>
+          </div>
+
+          <div className="text-center md:text-right space-y-1 text-text-muted">
+            <div>Built for Indian SMEs • Noida, UP, India</div>
+            <div className="text-[10px]">
               © {new Date().getFullYear()} RFQPilot. All rights reserved.
-            </p>
+            </div>
           </div>
         </div>
       </footer>
