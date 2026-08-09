@@ -720,6 +720,20 @@ export default function RFQList({
                                 </Link>
 
                                 <Link
+                                  href={`/rfqs/${rfq.id}`}
+                                  onClick={() => {
+                                    setOpenMenuId(null);
+                                    setMenuPos(null);
+                                  }}
+                                  className="w-full px-3 py-2 text-xs font-mono text-accent font-semibold hover:bg-bg-sunken flex items-center gap-2 cursor-pointer"
+                                >
+                                  <svg className="w-3.5 h-3.5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="square" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                  </svg>
+                                  <span>Compare Quotes</span>
+                                </Link>
+
+                                <Link
                                   href={`/rfqs/${rfq.id}/edit`}
                                   onClick={() => {
                                     setOpenMenuId(null);
