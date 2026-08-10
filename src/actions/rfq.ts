@@ -2,7 +2,7 @@
 
 import { RFQSchema } from "@/lib/schemas";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
-import { ActionResult, RFQ } from "@/types";
+import { ActionResult, RFQ, RFQComparisonData, RFQVendorWithDetails, Quote } from "@/types";
 import { revalidatePath } from "next/cache";
 import { sendRFQEmail } from "@/lib/resend";
 
@@ -707,8 +707,6 @@ export async function sendRFQ(
   };
 }
 
-<<<<<<< Updated upstream
-=======
 export async function getRFQComparisonData(
   rfqId: string
 ): Promise<ActionResult<RFQComparisonData>> {
@@ -907,6 +905,3 @@ export async function saveRecommendation(
   }
 }
 
-
-
->>>>>>> Stashed changes
