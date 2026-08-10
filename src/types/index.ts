@@ -70,8 +70,19 @@ export interface GeminiResponse {
   specialRequirements: string;
 }
 
-<<<<<<< Updated upstream
-=======
+export interface Quote {
+  id: string;
+  rfq_vendor_id: string;
+  unit_price: number;
+  quantity_available: number;
+  lead_time_days: number;
+  payment_terms: string;
+  valid_until: string;
+  notes?: string | null;
+  created_at: string;
+  total_cost?: number;
+}
+
 export interface RFQVendorWithDetails {
   id: string;
   rfq_id: string;
@@ -112,7 +123,3 @@ export interface RFQComparisonData {
   vendors: RFQVendorWithDetails[];
   lowestUnitPrice: number | null;
 }
-
-
-
->>>>>>> Stashed changes
