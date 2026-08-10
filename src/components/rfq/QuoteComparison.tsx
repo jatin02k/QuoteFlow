@@ -6,11 +6,13 @@ import { RFQVendorWithDetails } from "@/types";
 interface QuoteComparisonProps {
   vendors: RFQVendorWithDetails[];
   lowestUnitPrice: number | null;
+  recommendedVendorName?: string;
 }
 
 export default function QuoteComparison({
   vendors,
   lowestUnitPrice,
+  recommendedVendorName,
 }: QuoteComparisonProps) {
   // If no vendors dispatched at all, show empty card
   if (!vendors || vendors.length === 0) {
@@ -97,20 +99,34 @@ export default function QuoteComparison({
                   lowestUnitPrice !== null &&
                   quote.unit_price === lowestUnitPrice;
 
+                const isAiRecommended =
+                  Boolean(recommendedVendorName) &&
+                  (v.vendor.name.toLowerCase() === recommendedVendorName?.toLowerCase() ||
+                    v.vendor_id === recommendedVendorName);
+
                 return (
                   <tr
                     key={v.id}
                     className={`transition-colors hover:bg-bg-surface/60 ${
-                      isLowest ? "bg-status-success-bg/40" : ""
+                      isAiRecommended
+                        ? "bg-accent-light/40"
+                        : isLowest
+                        ? "bg-status-success-bg/40"
+                        : ""
                     }`}
                   >
                     {/* Vendor Name */}
                     <td className="py-3.5 px-4">
-                      <div className="font-bold text-text-primary flex items-center gap-1.5">
+                      <div className="font-bold text-text-primary flex items-center gap-1.5 flex-wrap">
                         {v.vendor.name}
                         {isLowest && (
                           <span className="inline-flex items-center px-1.5 py-0.2 text-[9px] font-mono font-bold uppercase bg-status-success text-white rounded-xs">
                             Best Rate
+                          </span>
+                        )}
+                        {isAiRecommended && (
+                          <span className="inline-flex items-center px-1.5 py-0.2 text-[9px] font-mono font-bold uppercase bg-accent text-white rounded-xs gap-0.5">
+                            ★ AI Pick
                           </span>
                         )}
                       </div>

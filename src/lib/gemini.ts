@@ -462,3 +462,216 @@ ${rawText}`;
 
   return smartParseRFQ(rawText);
 }
+
+export interface GenerateRecommendationInput {
+  rfqTitle: string;
+  specifications?: string[];
+  quotes: Array<{
+    vendorId?: string;
+    vendorName: string;
+    unitPrice: number;
+    totalCost: number;
+    leadTimeDays: number;
+    paymentTerms: string;
+    notes?: string | null;
+  }>;
+}
+
+export interface AIRecommendationData {
+  recommended_vendor_id: string;
+  recommended_vendor_name: string;
+  reasoning: string;
+  confidence_score: number;
+  key_trade_offs: string[];
+}
+
+function heuristicGenerateRecommendation(
+  input: GenerateRecommendationInput
+): AIRecommendationData {
+  const { quotes } = input;
+  if (!quotes || quotes.length === 0) {
+    return {
+      recommended_vendor_id: "",
+      recommended_vendor_name: "No Vendors Submitted",
+      reasoning: "No quotes have been submitted for analysis yet.",
+      confidence_score: 0,
+      key_trade_offs: ["Awaiting supplier responses"],
+    };
+  }
+
+  if (quotes.length === 1) {
+    const q = quotes[0];
+    return {
+      recommended_vendor_id: q.vendorId || q.vendorName,
+      recommended_vendor_name: q.vendorName,
+      reasoning: `${q.vendorName} is currently the sole bidder for this RFQ, offering a unit price of ₹${q.unitPrice.toLocaleString("en-IN")} with a lead time of ${q.leadTimeDays} day(s) under ${q.paymentTerms} terms.`,
+      confidence_score: 85,
+      key_trade_offs: [
+        `Single response submitted (Total: ₹${q.totalCost.toLocaleString("en-IN")})`,
+        `Lead time: ${q.leadTimeDays} days with payment terms: ${q.paymentTerms}`,
+      ],
+    };
+  }
+
+  // Multi-quote comparative scoring
+  const minCost = Math.min(...quotes.map((q) => q.totalCost || q.unitPrice));
+  const maxCost = Math.max(...quotes.map((q) => q.totalCost || q.unitPrice));
+
+  const minLeadTime = Math.min(...quotes.map((q) => q.leadTimeDays));
+  const maxLeadTime = Math.max(...quotes.map((q) => q.leadTimeDays));
+
+  function getTermsScore(terms: string): number {
+    const t = terms.toLowerCase();
+    if (t.includes("net 60")) return 100;
+    if (t.includes("net 45")) return 85;
+    if (t.includes("net 30")) return 70;
+    if (t.includes("net 15")) return 55;
+    if (t.includes("delivery") || t.includes("cod")) return 40;
+    if (t.includes("advance")) return 20;
+    return 50;
+  }
+
+  let bestVendor = quotes[0];
+  let bestScore = -1;
+
+  quotes.forEach((q) => {
+    const costRatio = maxCost === minCost ? 1 : 1 - (q.totalCost - minCost) / (maxCost || 1);
+    const leadRatio = maxLeadTime === minLeadTime ? 1 : 1 - (q.leadTimeDays - minLeadTime) / (maxLeadTime || 1);
+    const termsScore = getTermsScore(q.paymentTerms) / 100;
+
+    // Weighting: 50% cost, 30% lead time, 20% payment terms
+    const score = costRatio * 50 + leadRatio * 30 + termsScore * 20;
+
+    if (score > bestScore) {
+      bestScore = score;
+      bestVendor = q;
+    }
+  });
+
+  const isLowestCost = bestVendor.totalCost === minCost;
+  const isFastestLead = bestVendor.leadTimeDays === minLeadTime;
+
+  const reasoningParts: string[] = [];
+  reasoningParts.push(
+    `${bestVendor.vendorName} provides the most balanced quote for ${input.rfqTitle || "this requirement"} at ₹${bestVendor.unitPrice.toLocaleString("en-IN")} per unit (Total: ₹${bestVendor.totalCost.toLocaleString("en-IN")}).`
+  );
+
+  if (isLowestCost && isFastestLead) {
+    reasoningParts.push(
+      `They offer both the lowest pricing and the fastest turnaround time of ${bestVendor.leadTimeDays} days.`
+    );
+  } else if (isLowestCost) {
+    reasoningParts.push(
+      `They offer the lowest total cost while maintaining a reasonable ${bestVendor.leadTimeDays}-day lead time under ${bestVendor.paymentTerms} terms.`
+    );
+  } else if (isFastestLead) {
+    reasoningParts.push(
+      `They deliver significantly faster than competitors (${bestVendor.leadTimeDays} days) with favorable ${bestVendor.paymentTerms} terms.`
+    );
+  } else {
+    reasoningParts.push(
+      `Their combination of ${bestVendor.leadTimeDays}-day delivery and ${bestVendor.paymentTerms} payment terms presents the optimal overall commercial value.`
+    );
+  }
+
+  const tradeOffs: string[] = [];
+  if (isLowestCost) {
+    tradeOffs.push(`Lowest total commercial cost: ₹${bestVendor.totalCost.toLocaleString("en-IN")}`);
+  } else {
+    tradeOffs.push(`Premium over lowest quote offset by superior lead time & payment conditions`);
+  }
+
+  if (isFastestLead) {
+    tradeOffs.push(`Fastest delivery lead time (${bestVendor.leadTimeDays} days)`);
+  } else {
+    tradeOffs.push(`Lead time: ${bestVendor.leadTimeDays} days (vs fastest competitor: ${minLeadTime} days)`);
+  }
+
+  tradeOffs.push(`Payment conditions: ${bestVendor.paymentTerms}`);
+
+  const confidenceScore = Math.min(98, Math.max(75, Math.round(75 + (bestScore / 100) * 20)));
+
+  return {
+    recommended_vendor_id: bestVendor.vendorId || bestVendor.vendorName,
+    recommended_vendor_name: bestVendor.vendorName,
+    reasoning: reasoningParts.join(" "),
+    confidence_score: confidenceScore,
+    key_trade_offs: tradeOffs,
+  };
+}
+
+export async function generateRecommendation(
+  input: GenerateRecommendationInput
+): Promise<AIRecommendationData> {
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (apiKey && input.quotes && input.quotes.length > 0) {
+    try {
+      const ai = new GoogleGenAI({ apiKey });
+
+      const quotesFormatted = input.quotes
+        .map(
+          (q, idx) =>
+            `${idx + 1}. Vendor ID: "${q.vendorId || q.vendorName}", Name: "${q.vendorName}", Unit Price: ₹${q.unitPrice}, Total Cost: ₹${q.totalCost}, Lead Time: ${q.leadTimeDays} days, Payment Terms: "${q.paymentTerms}"${q.notes ? `, Notes: "${q.notes}"` : ""}`
+        )
+        .join("\n");
+
+      const prompt = `You are an expert procurement and supply chain analyst evaluating supplier quotes for a manufacturing company.
+
+RFQ Title: ${input.rfqTitle}
+Specifications: ${input.specifications && input.specifications.length > 0 ? input.specifications.join(", ") : "Standard specifications"}
+
+Submitted Quotes:
+${quotesFormatted}
+
+Instructions:
+Analyze supplier quotes for the given RFQ. Balance unit price, total cost, lead time, and payment terms. Select the best overall vendor and provide concise reasoning (2-3 sentences explaining why this vendor offers the best value balance). Provide a confidence score (0-100) and 2-3 key trade-off points.`;
+
+      const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: Type.OBJECT,
+            properties: {
+              recommended_vendor_id: { type: Type.STRING },
+              recommended_vendor_name: { type: Type.STRING },
+              reasoning: { type: Type.STRING },
+              confidence_score: { type: Type.NUMBER },
+              key_trade_offs: {
+                type: Type.ARRAY,
+                items: { type: Type.STRING },
+              },
+            },
+            required: [
+              "recommended_vendor_id",
+              "recommended_vendor_name",
+              "reasoning",
+              "confidence_score",
+              "key_trade_offs",
+            ],
+          },
+        },
+      });
+
+      if (response.text) {
+        const parsed = JSON.parse(response.text) as AIRecommendationData;
+        if (parsed.recommended_vendor_name && parsed.reasoning) {
+          return {
+            recommended_vendor_id: parsed.recommended_vendor_id || "",
+            recommended_vendor_name: parsed.recommended_vendor_name,
+            reasoning: parsed.reasoning,
+            confidence_score: Number(parsed.confidence_score) || 85,
+            key_trade_offs: Array.isArray(parsed.key_trade_offs) ? parsed.key_trade_offs : [],
+          };
+        }
+      }
+    } catch (err) {
+      console.warn("[generateRecommendation] Gemini API error, falling back to heuristic:", err);
+    }
+  }
+
+  return heuristicGenerateRecommendation(input);
+}
+

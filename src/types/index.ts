@@ -22,6 +22,14 @@ export interface Vendor {
   created_at: string;
 }
 
+export interface AIRecommendationData {
+  recommended_vendor_id: string;
+  recommended_vendor_name: string;
+  reasoning: string;
+  confidence_score: number;
+  key_trade_offs: string[];
+}
+
 export type RFQStatus = "draft" | "sent" | "comparing" | "closed" | "deleted";
 
 export interface RFQParsedData {
@@ -41,6 +49,7 @@ export interface RFQ {
   title: string;
   raw_text?: string | null;
   parsed_data?: RFQParsedData | Record<string, any> | null;
+  recommendation?: AIRecommendationData | Record<string, any> | null;
   status: RFQStatus;
   deadline?: string | null;
   vendors_contacted: number;
@@ -51,19 +60,18 @@ export interface RFQ {
   deleted_at?: string | null;
 }
 
-export interface Quote {
-  id: string;
-  rfq_vendor_id: string;
-  unit_price: number;
-  quantity_available: number;
-  lead_time_days: number;
-  payment_terms: string;
-  valid_until: string;
-  notes?: string | null;
-  created_at: string;
-  total_cost?: number;
+export interface GeminiResponse {
+  productName: string;
+  quantity: string;
+  unit: string;
+  specifications: string[];
+  deliveryDeadline: string;
+  deliveryLocation: string;
+  specialRequirements: string;
 }
 
+<<<<<<< Updated upstream
+=======
 export interface RFQVendorWithDetails {
   id: string;
   rfq_id: string;
@@ -94,6 +102,7 @@ export interface RFQComparisonData {
     deadline?: string | null;
     raw_text?: string | null;
     parsed_data?: RFQParsedData | Record<string, any> | null;
+    recommendation?: AIRecommendationData | Record<string, any> | null;
     attachment_url?: string | null;
     attachment_name?: string | null;
     vendors_contacted: number;
@@ -105,3 +114,5 @@ export interface RFQComparisonData {
 }
 
 
+
+>>>>>>> Stashed changes

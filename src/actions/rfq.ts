@@ -2,7 +2,7 @@
 
 import { RFQSchema } from "@/lib/schemas";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
-import { ActionResult, RFQ, RFQComparisonData, RFQVendorWithDetails, Quote } from "@/types";
+import { ActionResult, RFQ } from "@/types";
 import { revalidatePath } from "next/cache";
 import { sendRFQEmail } from "@/lib/resend";
 
@@ -707,6 +707,8 @@ export async function sendRFQ(
   };
 }
 
+<<<<<<< Updated upstream
+=======
 export async function getRFQComparisonData(
   rfqId: string
 ): Promise<ActionResult<RFQComparisonData>> {
@@ -834,6 +836,7 @@ export async function getRFQComparisonData(
           deadline: rfq.deadline,
           raw_text: rfq.raw_text,
           parsed_data: rfq.parsed_data,
+          recommendation: rfq.recommendation || null,
           attachment_url: rfq.attachment_url,
           attachment_name: rfq.attachment_name,
           vendors_contacted: rfq.vendors_contacted,
@@ -875,4 +878,35 @@ export async function closeRFQ(rfqId: string): Promise<ActionResult<{ success: t
   }
 }
 
+export async function saveRecommendation(
+  rfqId: string,
+  recommendationData: object
+): Promise<ActionResult<{ success: true }>> {
+  if (!rfqId) {
+    return { success: false, error: "RFQ ID is required." };
+  }
 
+  try {
+    const adminSupabase = createAdminClient();
+
+    const { error } = await adminSupabase
+      .from("rfqs")
+      .update({ recommendation: recommendationData })
+      .eq("id", rfqId);
+
+    if (error) {
+      console.error("[saveRecommendation] Admin DB error:", error.message);
+      return { success: false, error: "Failed to save recommendation: " + error.message };
+    }
+
+    revalidatePath(`/rfqs/${rfqId}`);
+    return { success: true, data: { success: true } };
+  } catch (err: any) {
+    console.error("[saveRecommendation] Unexpected error:", err?.message || err);
+    return { success: false, error: "Something went wrong while saving recommendation." };
+  }
+}
+
+
+
+>>>>>>> Stashed changes
