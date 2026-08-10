@@ -707,3 +707,206 @@ export async function sendRFQ(
   };
 }
 
+<<<<<<< Updated upstream
+=======
+export async function getRFQComparisonData(
+  rfqId: string
+): Promise<ActionResult<RFQComparisonData>> {
+  const { supabase, user } = await getAuthenticatedUser();
+  if (!user || !supabase) return { success: false, error: "Unauthorized" };
+
+  try {
+    // 1. Fetch single RFQ row
+    const { data: rfq, error: rfqError } = await supabase
+      .from("rfqs")
+      .select("*")
+      .eq("id", rfqId)
+      .eq("company_id", user.id)
+      .single();
+
+    if (rfqError || !rfq) {
+      console.error("[getRFQComparisonData] DB error fetching RFQ:", rfqError?.message);
+      return { success: false, error: "RFQ not found or access denied." };
+    }
+
+    // 2. Fetch all rfq_vendors records associated with rfq_id, with joined vendors and quotes
+    const { data: rfqVendorsData, error: rvError } = await supabase
+      .from("rfq_vendors")
+      .select(`
+        id,
+        rfq_id,
+        vendor_id,
+        token,
+        status,
+        email_sent_at,
+        created_at,
+        vendors (
+          id,
+          name,
+          email,
+          phone,
+          category
+        ),
+        quotes (
+          id,
+          unit_price,
+          quantity_available,
+          lead_time_days,
+          payment_terms,
+          valid_until,
+          notes
+        )
+      `)
+      .eq("rfq_id", rfqId);
+
+    if (rvError) {
+      console.error("[getRFQComparisonData] DB error fetching RFQ vendors:", rvError.message);
+      return { success: false, error: "Failed to fetch vendor records for comparison." };
+    }
+
+    const rfqParsed = (rfq.parsed_data || {}) as Record<string, any>;
+    const requestedQtyNumber = Number(rfqParsed.quantity) || 1;
+
+    // 3. Format vendor & quote payload
+    const vendors: RFQVendorWithDetails[] = (rfqVendorsData || []).map((item: any) => {
+      const rawVendor = Array.isArray(item.vendors) ? item.vendors[0] : item.vendors;
+      const rawQuote = Array.isArray(item.quotes) ? item.quotes[0] : item.quotes;
+
+      let quoteData: Quote | null = null;
+      if (rawQuote && rawQuote.unit_price !== undefined) {
+        const unitPrice = Number(rawQuote.unit_price) || 0;
+        // Domain Rule: Total Cost = Unit Price * Requested RFQ Quantity
+        const totalCost = Number((unitPrice * requestedQtyNumber).toFixed(2));
+
+        quoteData = {
+          id: rawQuote.id,
+          rfq_vendor_id: item.id,
+          unit_price: unitPrice,
+          quantity_available: Number(rawQuote.quantity_available) || requestedQtyNumber,
+          total_cost: totalCost,
+          lead_time_days: Number(rawQuote.lead_time_days) || 0,
+          payment_terms: rawQuote.payment_terms || "N/A",
+          valid_until: rawQuote.valid_until || "",
+          notes: rawQuote.notes || null,
+          created_at: "",
+        };
+      }
+
+      return {
+        id: item.id,
+        rfq_id: item.rfq_id,
+        vendor_id: item.vendor_id,
+        token: item.token,
+        status: item.status || "pending",
+        email_sent_at: item.email_sent_at || null,
+        created_at: item.created_at,
+        vendor: {
+          id: rawVendor?.id || item.vendor_id,
+          name: rawVendor?.name || "Unknown Supplier",
+          email: rawVendor?.email || "",
+          phone: rawVendor?.phone || null,
+          category: rawVendor?.category || undefined,
+        },
+        quote: quoteData,
+      };
+    });
+
+    // 4. Calculate lowestUnitPrice among all active submitted quotes
+    const submittedPrices = vendors
+      .map((v) => (v.quote ? v.quote.unit_price : undefined))
+      .filter((p): p is number => typeof p === "number" && !isNaN(p) && p > 0);
+
+    const lowestUnitPrice = submittedPrices.length > 0 ? Math.min(...submittedPrices) : null;
+
+    const itemName = rfqParsed.product_name || rfqParsed.item_name || rfq.title;
+    const quantity = rfqParsed.quantity !== undefined ? rfqParsed.quantity : 1;
+    const unit = rfqParsed.unit || "";
+
+    return {
+      success: true,
+      data: {
+        rfq: {
+          id: rfq.id,
+          company_id: rfq.company_id,
+          title: rfq.title,
+          status: rfq.status,
+          item_name: itemName,
+          quantity,
+          unit,
+          deadline: rfq.deadline,
+          raw_text: rfq.raw_text,
+          parsed_data: rfq.parsed_data,
+          recommendation: rfq.recommendation || null,
+          attachment_url: rfq.attachment_url,
+          attachment_name: rfq.attachment_name,
+          vendors_contacted: rfq.vendors_contacted,
+          quotes_received: rfq.quotes_received,
+          created_at: rfq.created_at,
+        },
+        vendors,
+        lowestUnitPrice,
+      },
+    };
+  } catch (err: any) {
+    console.error("[getRFQComparisonData] Unexpected error:", err?.message || err);
+    return { success: false, error: "Something went wrong while fetching RFQ comparison data." };
+  }
+}
+
+export async function closeRFQ(rfqId: string): Promise<ActionResult<{ success: true }>> {
+  const { supabase, user } = await getAuthenticatedUser();
+  if (!user || !supabase) return { success: false, error: "Unauthorized" };
+
+  try {
+    const { error } = await supabase
+      .from("rfqs")
+      .update({ status: "closed" })
+      .eq("id", rfqId)
+      .eq("company_id", user.id);
+
+    if (error) {
+      console.error("[closeRFQ] DB error:", error.message);
+      return { success: false, error: "Failed to close RFQ." };
+    }
+
+    revalidatePath("/rfqs");
+    revalidatePath(`/rfqs/${rfqId}`);
+    return { success: true, data: { success: true } };
+  } catch (err: any) {
+    console.error("[closeRFQ] Unexpected error:", err?.message || err);
+    return { success: false, error: "Something went wrong while closing RFQ." };
+  }
+}
+
+export async function saveRecommendation(
+  rfqId: string,
+  recommendationData: object
+): Promise<ActionResult<{ success: true }>> {
+  if (!rfqId) {
+    return { success: false, error: "RFQ ID is required." };
+  }
+
+  try {
+    const adminSupabase = createAdminClient();
+
+    const { error } = await adminSupabase
+      .from("rfqs")
+      .update({ recommendation: recommendationData })
+      .eq("id", rfqId);
+
+    if (error) {
+      console.error("[saveRecommendation] Admin DB error:", error.message);
+      return { success: false, error: "Failed to save recommendation: " + error.message };
+    }
+
+    revalidatePath(`/rfqs/${rfqId}`);
+    return { success: true, data: { success: true } };
+  } catch (err: any) {
+    console.error("[saveRecommendation] Unexpected error:", err?.message || err);
+    return { success: false, error: "Something went wrong while saving recommendation." };
+  }
+}
+
+
+
+>>>>>>> Stashed changes

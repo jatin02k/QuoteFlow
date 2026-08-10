@@ -3,6 +3,12 @@ import Link from "next/link";
 import { getRFQ, getRFQVendors, getCompanyName } from "@/actions/rfq";
 import { getVendors } from "@/actions/vendor";
 import { RFQStatus, Vendor } from "@/types";
+<<<<<<< Updated upstream
+=======
+import QuoteComparison from "@/components/rfq/QuoteComparison";
+import AIRecommendationCard from "@/components/rfq/AIRecommendationCard";
+import VendorStatusList from "@/components/rfq/VendorStatusList";
+>>>>>>> Stashed changes
 import VendorDispatchSelector from "@/components/rfq/VendorDispatchSelector";
 
 export const metadata = {
@@ -101,6 +107,9 @@ export default async function RFQDetailPage({
     ? parsedData.specifications.join(", ")
     : null;
 
+  const submittedQuotesCount = comparisonVendors.filter((v) => Boolean(v.quote)).length;
+  const recData = rfq.recommendation as any;
+
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       {/* Navigation Breadcrumb & Header */}
@@ -131,6 +140,7 @@ export default async function RFQDetailPage({
         </div>
       </div>
 
+<<<<<<< Updated upstream
       {/* Two-Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* LEFT COLUMN: Email Preview Card */}
@@ -144,6 +154,164 @@ export default async function RFQDetailPage({
               <span className="text-xs text-text-muted font-body">
                 This is what vendors will receive in their inbox
               </span>
+=======
+      {/* Summary KPI Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="p-3.5 bg-bg-surface border border-border-default rounded-sm space-y-1">
+          <div className="text-[10px] font-mono text-text-muted uppercase tracking-wider font-semibold">
+            Product / Item
+          </div>
+          <div className="font-heading font-bold text-xs text-text-primary truncate">
+            {rfq.item_name}
+          </div>
+        </div>
+
+        <div className="p-3.5 bg-bg-surface border border-border-default rounded-sm space-y-1">
+          <div className="text-[10px] font-mono text-text-muted uppercase tracking-wider font-semibold">
+            Quantity
+          </div>
+          <div className="font-mono font-bold text-xs text-text-primary">
+            {String(rfq.quantity)} {rfq.unit || ""}
+          </div>
+        </div>
+
+        <div className="p-3.5 bg-bg-surface border border-border-default rounded-sm space-y-1">
+          <div className="text-[10px] font-mono text-text-muted uppercase tracking-wider font-semibold">
+            Deadline
+          </div>
+          <div className="font-mono font-bold text-xs text-text-primary">
+            {rfq.deadline ? rfq.deadline : "Not Set"}
+          </div>
+        </div>
+
+        <div className="p-3.5 bg-bg-surface border border-border-default rounded-sm space-y-1">
+          <div className="text-[10px] font-mono text-text-muted uppercase tracking-wider font-semibold">
+            Contacted
+          </div>
+          <div className="font-mono font-bold text-xs text-text-primary">
+            {comparisonVendors.length} Suppliers
+          </div>
+        </div>
+
+        <div className="p-3.5 bg-bg-surface border border-border-default rounded-sm space-y-1">
+          <div className="text-[10px] font-mono text-text-muted uppercase tracking-wider font-semibold">
+            Quotes Received
+          </div>
+          <div className="font-mono font-bold text-xs text-accent">
+            {submittedQuotesCount} Quotes
+          </div>
+        </div>
+
+        <div className="p-3.5 bg-status-success-bg/40 border border-status-success/30 rounded-sm space-y-1">
+          <div className="text-[10px] font-mono text-status-success uppercase tracking-wider font-bold">
+            Lowest Unit Price
+          </div>
+          <div className="font-mono font-bold text-xs text-status-success">
+            {lowestUnitPrice !== null
+              ? `₹${lowestUnitPrice.toLocaleString("en-IN", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}`
+              : "No Quotes"}
+          </div>
+        </div>
+      </div>
+
+      {/* MAIN SECTION 1: AI Recommendation Card & Quote Comparison Matrix */}
+      <section className="space-y-6">
+        <AIRecommendationCard
+          rfqId={rfq.id}
+          submittedQuotesCount={submittedQuotesCount}
+          initialRecommendation={recData}
+        />
+        <QuoteComparison
+          vendors={comparisonVendors}
+          lowestUnitPrice={lowestUnitPrice}
+          recommendedVendorName={recData?.recommended_vendor_name}
+        />
+      </section>
+
+      {/* MAIN SECTION 2: Supplier Status & Dispatch Management Panel */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Vendor Status List with Close RFQ Action */}
+        <div className="lg:col-span-6">
+          <VendorStatusList
+            rfqId={rfq.id}
+            rfqStatus={rfq.status}
+            vendors={comparisonVendors}
+          />
+        </div>
+
+        {/* Vendor Dispatch Selector */}
+        <div className="lg:col-span-6">
+          <VendorDispatchSelector
+            rfqId={rfq.id}
+            rfqStatus={rfq.status}
+            vendors={allDirectoryVendors}
+            rfqVendors={comparisonVendors}
+          />
+        </div>
+      </section>
+
+      {/* SECTION 3: Requirement Specifications & Email Preview (Reference Card) */}
+      <section className="bg-bg-surface border border-border-default rounded-sm p-6 space-y-4 shadow-xs">
+        <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-[10px] font-mono font-bold bg-accent-light text-accent border border-accent-border uppercase">
+              SPECIFICATION REFERENCE
+            </span>
+            <span className="text-xs text-text-muted font-body">
+              Requirement details dispatched to suppliers in email requests
+            </span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 font-body">
+          {/* Detailed Spec Table */}
+          <div className="border border-border-default rounded-sm overflow-hidden text-xs bg-bg-base">
+            <div className="bg-bg-surface px-3.5 py-2 border-b border-border-default font-heading font-bold text-text-secondary uppercase tracking-wider text-[11px]">
+              Extracted Parameters
+            </div>
+            <div className="divide-y divide-border-subtle">
+              {parsedData.product_name && (
+                <div className="grid grid-cols-12 p-3 bg-accent-light/30">
+                  <span className="col-span-4 text-text-secondary font-semibold">Product / Item:</span>
+                  <span className="col-span-8 text-text-primary font-bold">{parsedData.product_name}</span>
+                </div>
+              )}
+              {parsedData.quantity && (
+                <div className="grid grid-cols-12 p-3">
+                  <span className="col-span-4 text-text-secondary font-semibold">Quantity Requested:</span>
+                  <span className="col-span-8 font-mono text-text-primary font-bold">
+                    {String(parsedData.quantity)} {parsedData.unit || ""}
+                  </span>
+                </div>
+              )}
+              {rfq.deadline && (
+                <div className="grid grid-cols-12 p-3">
+                  <span className="col-span-4 text-text-secondary font-semibold">Deadline:</span>
+                  <span className="col-span-8 font-mono text-text-primary">{rfq.deadline}</span>
+                </div>
+              )}
+              {parsedData.delivery_location && (
+                <div className="grid grid-cols-12 p-3">
+                  <span className="col-span-4 text-text-secondary font-semibold">Delivery Location:</span>
+                  <span className="col-span-8 text-text-primary">{parsedData.delivery_location}</span>
+                </div>
+              )}
+              {specificationsList && (
+                <div className="grid grid-cols-12 p-3">
+                  <span className="col-span-4 text-text-secondary font-semibold">Specifications:</span>
+                  <span className="col-span-8 text-text-primary">{specificationsList}</span>
+                </div>
+              )}
+              {parsedData.special_requirements && (
+                <div className="grid grid-cols-12 p-3">
+                  <span className="col-span-4 text-text-secondary font-semibold">Special Requirements:</span>
+                  <span className="col-span-8 text-text-primary">{parsedData.special_requirements}</span>
+                </div>
+              )}
+>>>>>>> Stashed changes
             </div>
           </div>
 
