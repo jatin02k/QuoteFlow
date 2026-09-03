@@ -3,7 +3,7 @@ import { createAdminClient } from "@/lib/supabase/server";
 import VendorQuoteResponseForm from "@/components/vendor/VendorQuoteResponseForm";
 
 export const metadata = {
-  title: "Submit Vendor Quote // RFQPilot",
+  title: "Submit Vendor Quote // RFQDeck",
   description: "Public vendor response portal for price and delivery quotation.",
 };
 
@@ -149,7 +149,7 @@ export default async function VendorRespondPage({
         {/* Header Branding */}
         <div className="text-center space-y-1">
           <span className="font-heading font-bold text-2xl tracking-tight text-text-primary">
-            RFQPilot
+            RFQDeck
           </span>
           <p className="font-mono text-[10px] text-text-muted tracking-widest uppercase">
             SECURE VENDOR QUOTATION PORTAL
@@ -234,7 +234,7 @@ export default async function VendorRespondPage({
 
         {/* Footer */}
         <div className="text-center text-[10px] font-mono text-text-muted py-4">
-          © {new Date().getFullYear()} RFQPilot. All rights reserved. Secure encrypted token verification.
+          © {new Date().getFullYear()} RFQDeck. All rights reserved. Secure encrypted token verification.
         </div>
       </div>
     </div>
@@ -254,7 +254,7 @@ function ErrorContainer({ title, message }: { title: string; message: string }) 
         <h1 className="font-heading text-xl font-bold text-text-primary">{title}</h1>
         <p className="text-xs text-text-secondary leading-relaxed">{message}</p>
         <div className="pt-4 border-t border-border-default text-[10px] font-mono text-text-muted">
-          RFQPilot Vendor Gateway
+          RFQDeck Vendor Gateway
         </div>
       </div>
     </div>

@@ -134,7 +134,7 @@ export default function VendorList({ initialVendors }: VendorListProps) {
             No Suppliers Registered Yet
           </h3>
           <p className="text-sm text-text-secondary leading-relaxed max-w-md mx-auto mb-6">
-            Build your supplier database. Dispatch active RFQs to multiple suppliers with one click and let RFQPilot auto-compare incoming pricing models.
+            Build your supplier database. Dispatch active RFQs to multiple suppliers with one click and let RFQDeck auto-compare incoming pricing models.
           </p>
           <button
             id="empty-state-add-vendor"

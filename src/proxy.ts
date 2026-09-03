@@ -46,7 +46,7 @@ export async function proxy(request: NextRequest) {
     return supabaseResponse
   }
 
-  // 4. Enforce RFQPilot Security Guards
+  // 4. Enforce RFQDeck Security Guards
   // If user is logged in, do not let them go back to the login page
   if (user && isLoginPage) {
     return NextResponse.redirect(new URL('/dashboard', request.url))

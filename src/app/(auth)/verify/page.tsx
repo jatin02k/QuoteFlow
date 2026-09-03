@@ -33,7 +33,7 @@ function VerifyContent() {
       <div className="w-full max-w-md">
         <div className="mb-6 text-center">
           <h1 className="font-heading text-5xl font-bold tracking-tight text-text-primary">
-            RFQPilot
+            RFQDeck
           </h1>
         </div>
 

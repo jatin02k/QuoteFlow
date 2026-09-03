@@ -3,14 +3,14 @@ trigger: model_decision
 description: Use this rule only when creating or designing frontend UI/UX code.
 ---
 
-# DESIGN SPECIFICATION: RFQPILOT (INDIAN SME INDUSTRIAL UTILITARIAN)
+# DESIGN SPECIFICATION: RFQDECK (INDIAN SME INDUSTRIAL UTILITARIAN)
 **Version:** 1.0 (The 'Industrial Hardware' Release)
 **Oriented To:** Indian Factory Owners, Managing Directors, & Procurement Managers
 
 ---
 
 ## I. Narrative Vibe & Aesthetic Emulation
-The "RFQPilot" aesthetic is engineered to mirror rugged, premium **Industrial Automation Hardware** (like Siemens or Rockwell control modules). It is designed to look highly professional to a 55-year-old factory owner in Noida, Pune, or Ludhiana. 
+The "RFQDeck" aesthetic is engineered to mirror rugged, premium **Industrial Automation Hardware** (like Siemens or Rockwell control modules). It is designed to look highly professional to a 55-year-old factory owner in Noida, Pune, or Ludhiana. 
 - **Core Principle:** Data-forward, robust layout structures. Absolutely NO bubbly corners, neon purple highlights, or generic AI startup gradients.
 - **Visual Feel:** A physical precision panel gauge. Sharp lines, clear typography, and immediate scannability between manufacturing floor runs.
 
@@ -54,7 +54,7 @@ The "RFQPilot" aesthetic is engineered to mirror rugged, premium **Industrial Au
 
 ### 3. Reference Prototype
 - **Link** - https://v0.app/chat/saas-procurement-dashboard-f5LPXA0g4OJ?ref=5KMX2T. Follow this link to get structural, UX reference. 
-- **NOTE:** Do not follow this link ui. just follow ux and working flow. make sure ui and overall feel of website is like not generic AI website. The working flow of RFQPilot should be easy for user to follow and use. So always recommend me best options when i make wrong decision.
+- **NOTE:** Do not follow this link ui. just follow ux and working flow. make sure ui and overall feel of website is like not generic AI website. The working flow of RFQDeck should be easy for user to follow and use. So always recommend me best options when i make wrong decision.
 
 ## IV. UX Prototype Structural Reference Integration
 

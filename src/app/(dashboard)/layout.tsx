@@ -16,7 +16,7 @@ export default async function DashboardLayout({
     redirect('/login')
   }
 
-  const userEmail = user.email || 'operator@rfqpilot.in'
+  const userEmail = user.email || 'operator@rfqdeck.in'
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-bg-base font-body text-text-primary antialiased">
@@ -31,10 +31,10 @@ export default async function DashboardLayout({
             {/* Mobile Brand Badge */}
             <div className="flex md:hidden items-center gap-2 mr-1">
               <div className="bg-accent text-white font-mono font-bold text-xs flex items-center justify-center h-7 w-7 rounded-sm border border-accent-hover">
-                RP
+                RD
               </div>
               <span className="font-heading text-base font-bold text-text-primary tracking-tight">
-                RFQPilot
+                RFQDeck
               </span>
             </div>
 

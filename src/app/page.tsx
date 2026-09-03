@@ -3,7 +3,7 @@ import Link from 'next/link'
 import InteractiveDemo from '@/components/landing/InteractiveDemo'
 
 export const metadata = {
-  title: 'RFQPilot // B2B Procure-to-Pay Engine for Indian Manufacturers',
+  title: 'RFQDeck // B2B Procure-to-Pay Engine for Indian Manufacturers',
   description: 'Automate raw material sourcing, dispatch multi-vendor RFQs with single-use tokens, and compare landed costs in unified matrices.',
 }
 
@@ -15,7 +15,7 @@ export default function Home() {
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="font-heading font-extrabold text-xl tracking-tight text-text-primary">
-              RFQPilot
+              RFQDeck
             </span>
             <span className="text-[10px] font-mono uppercase tracking-wider bg-bg-sunken border border-border-default px-2 py-0.5 rounded-sm text-text-secondary">
               v1.0 // B2B PROCURE-TO-PAY ENGINE
@@ -69,13 +69,12 @@ export default function Home() {
                   INDUSTRIAL B2B PROCUREMENT ENGINE
                 </span>
                 <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-text-primary leading-[1.15]">
-                  Streamline Raw Material RFQs. <br />
                   Compare Vendor Quotes in Minutes.
                 </h1>
               </div>
 
               <p className="text-sm sm:text-base text-text-secondary leading-relaxed font-normal">
-                Replace endless email chains, WhatsApp messages, and manual Excel data entry. Upload your engineering spec once, dispatch to 30+ suppliers via passwordless token links, and evaluate side-by-side total landed cost matrices automatically.
+                Replace endless email chains, WhatsApp messages, and manual Excel data entry. Upload your engineering spec once, dispatch to 30+ suppliers and evaluate side-by-side total landed cost matrices automatically.
               </p>
 
               {/* Action Buttons */}
@@ -184,12 +183,12 @@ export default function Home() {
               </div>
             </div>
 
-            {/* The RFQPilot Way */}
+            {/* The RFQDeck Way */}
             <div className="bg-accent-light border-2 border-accent rounded-md p-6 sm:p-8 flex flex-col justify-between space-y-6">
               <div>
                 <div className="flex items-center justify-between pb-4 border-b border-accent-border mb-5">
                   <h3 className="font-heading text-base font-bold text-accent uppercase tracking-wider flex items-center gap-2">
-                    <span>With RFQPilot Engine</span>
+                    <span>With RFQDeck Engine</span>
                   </h3>
                   <span className="text-[11px] font-mono text-status-success bg-status-success-bg px-2.5 py-0.5 rounded-sm border border-status-success/40 font-bold">
                     20 MINUTES TOTAL
@@ -232,7 +231,7 @@ export default function Home() {
               WORKFLOW ARCHITECTURE
             </span>
             <h2 className="font-heading text-2xl sm:text-3xl font-bold text-text-primary">
-              How RFQPilot Automates Your Procurement Cycle
+              How RFQDeck Automates Your Procurement Cycle
             </h2>
           </div>
 
@@ -265,7 +264,7 @@ export default function Home() {
                 2. Passwordless Vendor Dispatch
               </h3>
               <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-body">
-                Select targeted suppliers from your directory. RFQPilot dispatches professional emails with isolated token links. Suppliers submit prices directly on mobile or desktop without logging in.
+                Select targeted suppliers from your directory. RFQDeck dispatches professional emails with isolated token links. Suppliers submit prices directly on mobile or desktop without logging in.
               </p>
             </div>
 
@@ -281,7 +280,7 @@ export default function Home() {
                 3. Compare Total Landed Costs
               </h3>
               <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-body">
-                As supplier responses arrive, RFQPilot automatically calculates total order values, formats payment terms (Advance, Net 30, Net 45, Net 60), and highlights the optimal supplier option.
+                As supplier responses arrive, RFQDeck automatically calculates total order values, formats payment terms (Advance, Net 30, Net 45, Net 60), and highlights the optimal supplier option.
               </p>
             </div>
           </div>
@@ -497,7 +496,7 @@ export default function Home() {
                 <span>Can competing suppliers see each other's quotes or identities?</span>
               </h4>
               <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-body pl-5">
-                Never. RFQPilot enforces strict multi-tenant supplier isolation. Each token link is isolated so suppliers only see the items requested and can never access competitor identities or pricing.
+                Never. RFQDeck enforces strict multi-tenant supplier isolation. Each token link is isolated so suppliers only see the items requested and can never access competitor identities or pricing.
               </p>
             </div>
 
@@ -517,7 +516,7 @@ export default function Home() {
                 <span>How is landed cost calculated across different payment terms?</span>
               </h4>
               <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-body pl-5">
-                RFQPilot scales unit pricing by requested RFQ quantities (`Total Cost = Unit Rate × Quantity`) and displays payment terms (`Advance`, `Net 30`, `Net 45`, `Net 60`) side-by-side for quick financial comparison.
+                RFQDeck scales unit pricing by requested RFQ quantities (`Total Cost = Unit Rate × Quantity`) and displays payment terms (`Advance`, `Net 30`, `Net 45`, `Net 60`) side-by-side for quick financial comparison.
               </p>
             </div>
           </div>
@@ -555,7 +554,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="text-center md:text-left space-y-1">
             <span className="font-heading font-extrabold text-base text-text-primary tracking-tight">
-              RFQPilot
+              RFQDeck
             </span>
             <p className="text-text-muted font-body text-xs">
               Industrial Procure-to-Pay Engine for Indian SME Manufacturers
@@ -580,7 +579,7 @@ export default function Home() {
           <div className="text-center md:text-right space-y-1 text-text-muted">
             <div>Built for Indian SMEs • Noida, UP, India</div>
             <div className="text-[10px]">
-              © {new Date().getFullYear()} RFQPilot. All rights reserved.
+              © {new Date().getFullYear()} RFQDeck. All rights reserved.
             </div>
           </div>
         </div>

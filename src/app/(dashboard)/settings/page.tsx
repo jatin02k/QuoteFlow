@@ -3,7 +3,7 @@ import { getCompanyName } from "@/actions/rfq";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
-  title: "Settings // RFQPilot",
+  title: "Settings // RFQDeck",
   description: "Company profile, procurement preferences, and security settings.",
 };
 
@@ -12,7 +12,7 @@ export default async function SettingsPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  const userEmail = user?.email || "operator@rfqpilot.in";
+  const userEmail = user?.email || "operator@rfqdeck.in";
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">

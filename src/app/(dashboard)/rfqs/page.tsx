@@ -3,7 +3,7 @@ import { getRFQs } from "@/actions/rfq";
 import RFQList from "@/components/rfq/RFQList";
 
 export const metadata = {
-  title: "Requests for Quotation: RFQPilot",
+  title: "Requests for Quotation: RFQDeck",
   description: "Manage, create, dispatch, and track manufacturing RFQs.",
 };
 

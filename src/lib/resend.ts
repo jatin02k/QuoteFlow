@@ -181,7 +181,7 @@ export async function sendRFQEmail(params: SendRFQEmailParams): Promise<boolean>
                 This link is unique to ${escapeHtml(vendorName)}. Valid until <strong>${escapeHtml(displayDeadline)}</strong>.
               </p>
               <p style="font-size: 11px; color: #8B8780; margin: 0; font-weight: 600;">
-                Powered by RFQPilot — Procurement made simple
+                Powered by RFQDeck — Procurement made simple
               </p>
             </td>
           </tr>

@@ -1,4 +1,4 @@
-# RFQPilot — Architecture & Tech Stack
+# RFQDeck — Architecture & Tech Stack
 
 ---
 
@@ -76,7 +76,7 @@ Both use Gemini 1.5 Flash (free tier).
 ## File Structure
 
 ```
-rfqpilot/
+rfqdeck/
 ├── src/
 │   ├── app/
 │   │   ├── (auth)/

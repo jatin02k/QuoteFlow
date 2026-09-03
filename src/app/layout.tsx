@@ -1,15 +1,19 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import React from 'react'
 import './globals.css'
 
+export const viewport: Viewport = {
+  themeColor: '#0f172a',
+}
+
 export const metadata: Metadata = {
   // Fixes absolute image scaling requirements globally
-  metadataBase: new URL("https://rfq-pilot-ten.vercel.app"), 
+  metadataBase: new URL("https://rfq-deck.vercel.app"), 
   
   // Base configuration & cyber-industrial branding alignment
   title: {
-    default: "RFQPilot: Operational RFQ Engine",
-    template: "%s // RFQPilot",
+    default: "RFQDeck: Operational RFQ Engine",
+    template: "%s // RFQDeck",
   },
   description: "Automate raw material sourcing, dispatch multi-vendor RFQs, and optimize supplier pipelines.",
   
@@ -17,9 +21,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
-
-  // Fixes: Missing theme-color toolbar customization
-  themeColor: "#0f172a", // Custom theme slate color matching your industrial UI base
 
   // Fixes: Favicon, Apple Touch Icon, and SVG alerts completely
   icons: {
@@ -38,10 +39,10 @@ export const metadata: Metadata = {
 
   // Core Open Graph Data Mapping
   openGraph: {
-    title: "RFQPilot: Operational RFQ Engine",
+    title: "RFQDeck: Operational RFQ Engine",
     description: "Automate raw material sourcing, dispatch multi-vendor RFQs, and optimize supplier pipelines.",
-    url: "https://rfq-pilot-ten.vercel.app",
-    siteName: "RFQPilot",
+    url: "https://rfq-deck.vercel.app",
+    siteName: "RFQDeck",
     locale: "en_US",
     type: "website",
     images: [
@@ -49,7 +50,7 @@ export const metadata: Metadata = {
         url: "/landing.png", // Routed path to your landing page preview
         width: 1200,             // Confirms the meta-declaration size
         height: 630,            
-        alt: "RFQPilot Operational RFQ Engine Preview",
+        alt: "RFQDeck Operational RFQ Engine Preview",
       },
     ],
   },
@@ -57,7 +58,7 @@ export const metadata: Metadata = {
   // Core Twitter/X Rich Card Protocol
   twitter: {
     card: "summary_large_image",
-    title: "RFQPilot: Operational RFQ Engine",
+    title: "RFQDeck: Operational RFQ Engine",
     description: "Automate raw material sourcing, dispatch multi-vendor RFQs, and optimize supplier pipelines.",
     images: ["/landing.png"],
     // Fixes: Missing twitter:site branding attribute
