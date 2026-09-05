@@ -27,6 +27,14 @@ interface SendQuoteNotificationParams {
   totalCost?: number;
   rfqLink: string;
 }
+interface SendFollowUpEmailParams {
+  vendorEmail: string;
+  vendorName: string;
+  companyName: string;
+  rfqTitle: string;
+  deadline: string | null;
+  responseLink: string;
+}
 
 export async function sendRFQEmail(params: SendRFQEmailParams): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
@@ -266,6 +274,130 @@ export async function sendQuoteSubmittedNotification(params: SendQuoteNotificati
     return false;
   }
 }
+
+export async function sendFollowUpEmail(params: SendFollowUpEmailParams): Promise<boolean> {
+  const apiKey = process.env.RESEND_API_KEY
+  const fromEmail = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev"
+
+  if (!apiKey) {
+    console.error("[sendFollowUpEmail] RESEND_API_KEY is not configured.")
+    return false
+  }
+
+  const displayDeadline = params.deadline
+    ? new Date(params.deadline).toLocaleDateString("en-IN")
+    : null
+
+  const subject = `Reminder: Quote still needed — ${params.rfqTitle}`
+
+  const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; background-color: #FAFAF8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; color: #1A1917;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #FAFAF8; padding: 32px 16px;">
+    <tr>
+      <td align="center">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; width: 100%; background-color: #FAFAF8; border: 1px solid #D4D0C8; border-radius: 6px; overflow: hidden; text-align: left;">
+          
+          <!-- Header -->
+          <tr>
+            <td style="background-color: #F4F3F0; padding: 24px; border-bottom: 1px solid #D4D0C8;">
+              <div style="font-size: 11px; font-weight: 700; color: #C17F24; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;">
+                Follow-Up Reminder
+              </div>
+              <div style="font-size: 20px; font-weight: 700; color: #1A1917;">
+                ${params.companyName}
+              </div>
+              <div style="font-size: 13px; color: #8B8780;">
+                Attention: ${params.vendorName}
+              </div>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding: 24px;">
+              <p style="font-size: 14px; line-height: 1.6; color: #4A4845; margin-top: 0;">
+                Dear <strong>${params.vendorName}</strong>,
+              </p>
+              <p style="font-size: 14px; line-height: 1.6; color: #4A4845;">
+                This is a friendly reminder that <strong>${params.companyName}</strong> 
+                is still waiting for your quote on:
+              </p>
+
+              <div style="background-color: #ECEAE5; border: 1px solid #D4D0C8; padding: 14px 18px; border-radius: 4px; margin: 20px 0;">
+                <div style="font-size: 11px; font-weight: 600; color: #8B8780; text-transform: uppercase; letter-spacing: 0.05em;">RFQ</div>
+                <div style="font-size: 16px; font-weight: 700; color: #1A1917; margin-top: 4px;">${params.rfqTitle}</div>
+                ${displayDeadline ? `
+                <div style="font-size: 13px; color: #B45309; margin-top: 6px; font-weight: 600;">
+                  Deadline: ${displayDeadline}
+                </div>` : ""}
+              </div>
+
+              <p style="font-size: 13px; color: #8B8780;">
+                This is a one-time reminder. Please submit your quote at your earliest convenience.
+              </p>
+
+              <!-- CTA -->
+              <div style="text-align: center; margin: 32px 0 24px 0;">
+                <a href="${params.responseLink}" target="_blank" 
+                   style="display: inline-block; background-color: #C17F24; color: #FFFFFF; font-size: 15px; font-weight: 700; text-decoration: none; padding: 14px 32px; border-radius: 6px; border: 1px solid #A86E1C;">
+                  Submit Your Quote →
+                </a>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #F4F3F0; padding: 16px 24px; border-top: 1px solid #D4D0C8; text-align: center;">
+              <p style="font-size: 11px; color: #8B8780; margin: 0; font-weight: 600;">
+                Powered by RFQDeck — Procurement made simple
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `
+
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: fromEmail,
+        to: [params.vendorEmail],
+        subject,
+        html: htmlContent,
+      }),
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error("[sendFollowUpEmail] Resend API error:", response.status, errorText)
+      return false
+    }
+
+    return true
+
+  } catch (err: any) {
+    console.error("[sendFollowUpEmail] Unexpected error:", err?.message || err)
+    return false
+  }
+}
+
 
 function escapeHtml(str: string): string {
   if (!str) return "";
