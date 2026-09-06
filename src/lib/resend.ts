@@ -368,7 +368,9 @@ export async function sendFollowUpEmail(params: SendFollowUpEmailParams): Promis
 </body>
 </html>
   `
-
+   const recipient = process.env.NODE_ENV === "development" 
+    ? "jatin02kr@gmail.com" 
+    : params.vendorEmail;
   try {
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -378,7 +380,7 @@ export async function sendFollowUpEmail(params: SendFollowUpEmailParams): Promis
       },
       body: JSON.stringify({
         from: fromEmail,
-        to: [params.vendorEmail],
+        to: recipient,
         subject,
         html: htmlContent,
       }),
