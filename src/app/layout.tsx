@@ -53,7 +53,7 @@ export const metadata: Metadata = {
 
   // Core Open Graph Data Mapping
   openGraph: {
-    title: "RFQDeck // B2B Procure-to-Pay Engine for Indian Manufacturers",
+    title: "RFQDeck | B2B Procure-to-Pay Engine for Indian Manufacturers",
     description: "Automate raw material sourcing, dispatch multi-vendor RFQs with single-use tokens, and compare landed costs in unified matrices.",
     url: "https://rfqdeck.com",
     siteName: "RFQDeck",
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
   // Core Twitter/X Rich Card Protocol
   twitter: {
     card: "summary_large_image",
-    title: "RFQDeck // B2B Procure-to-Pay Engine for Indian Manufacturers",
+    title: "RFQDeck | B2B Procure-to-Pay Engine for Indian Manufacturers",
     description: "Automate raw material sourcing, dispatch multi-vendor RFQs with single-use tokens, and compare landed costs in unified matrices.",
     images: ["/landing.png"],
     site: "@jatin02k",
@@ -124,7 +124,7 @@ const jsonLd = {
       "@type": "WebPage",
       "@id": "https://rfqdeck.com/#webpage",
       "url": "https://rfqdeck.com",
-      "name": "RFQDeck // B2B Procure-to-Pay Engine for Indian Manufacturers",
+      "name": "RFQDeck | B2B Procure-to-Pay Engine for Indian Manufacturers",
       "description": "Automate raw material sourcing, dispatch multi-vendor RFQs with single-use tokens, and compare landed costs in unified matrices.",
       "isPartOf": {
         "@id": "https://rfqdeck.com/#website"
