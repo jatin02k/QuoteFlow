@@ -8,7 +8,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   // Fixes absolute image scaling requirements globally
-  metadataBase: new URL("https://rfq-deck.vercel.app"), 
+  metadataBase: new URL("https://rfqdeck.com"), 
   
   // Base configuration & cyber-industrial branding alignment
   title: {
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "RFQDeck: Operational RFQ Engine",
     description: "Automate raw material sourcing, dispatch multi-vendor RFQs, and optimize supplier pipelines.",
-    url: "https://rfq-deck.vercel.app",
+    url: "https://rfqdeck.com",
     siteName: "RFQDeck",
     locale: "en_US",
     type: "website",
