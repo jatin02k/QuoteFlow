@@ -12,8 +12,8 @@ export const metadata: Metadata = {
   
   // Base configuration & cyber-industrial branding alignment
   title: {
-    default: "RFQDeck: Operational RFQ Engine",
-    template: "%s // RFQDeck",
+    default: "RFQDeck | Operational RFQ Engine",
+    template: "%s | RFQDeck",
   },
   description: "Automate raw material sourcing, dispatch multi-vendor RFQs, and optimize supplier pipelines.",
   
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 
   // Core Open Graph Data Mapping
   openGraph: {
-    title: "RFQDeck: Operational RFQ Engine",
+    title: "RFQDeck | Operational RFQ Engine",
     description: "Automate raw material sourcing, dispatch multi-vendor RFQs, and optimize supplier pipelines.",
     url: "https://rfqdeck.com",
     siteName: "RFQDeck",
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   // Core Twitter/X Rich Card Protocol
   twitter: {
     card: "summary_large_image",
-    title: "RFQDeck: Operational RFQ Engine",
+    title: "RFQDeck | Operational RFQ Engine",
     description: "Automate raw material sourcing, dispatch multi-vendor RFQs, and optimize supplier pipelines.",
     images: ["/landing.png"],
     // Fixes: Missing twitter:site branding attribute

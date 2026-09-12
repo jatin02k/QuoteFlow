@@ -4,7 +4,7 @@ import VendorList from "@/components/vendor/VendorList";
 import { Vendor } from "@/types";
 
 export const metadata = {
-  title: "Supplier Directory : RFQDeck",
+  title: "Supplier Directory | RFQDeck",
   description:
     "System portal for listing, filtering, provisioning, and managing company vendors and suppliers.",
 };

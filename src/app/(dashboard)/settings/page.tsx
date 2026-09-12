@@ -3,7 +3,7 @@ import { getCompanyName } from "@/actions/rfq";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
-  title: "Settings // RFQDeck",
+  title: "Settings | RFQDeck",
   description: "Company profile, procurement preferences, and security settings.",
 };
 

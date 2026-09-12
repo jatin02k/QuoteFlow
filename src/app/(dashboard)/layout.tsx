@@ -16,7 +16,7 @@ export default async function DashboardLayout({
     redirect('/login')
   }
 
-  const userEmail = user.email || 'operator@rfqdeck.in'
+  const userEmail = user.email || 'operator@rfqdeck.com'
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-bg-base font-body text-text-primary antialiased">

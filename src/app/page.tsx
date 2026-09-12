@@ -74,7 +74,7 @@ export default function Home() {
               </div>
 
               <p className="text-sm sm:text-base text-text-secondary leading-relaxed font-normal">
-                Replace endless email chains, WhatsApp messages, and manual Excel data entry. Upload your engineering spec once, dispatch to 30+ suppliers and evaluate side-by-side total landed cost matrices automatically.
+                Replace endless email chains, WhatsApp messages and manual Excel data entry. Upload your engineering spec once, dispatch to 30+ suppliers and evaluate side-by-side total landed cost matrices automatically.
               </p>
 
               {/* Action Buttons */}

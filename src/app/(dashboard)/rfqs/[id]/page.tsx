@@ -8,7 +8,7 @@ import AIRecommendationCard from "@/components/rfq/AIRecommendationCard";
 import VendorDispatchSelector from "@/components/rfq/VendorDispatchSelector";
 
 export const metadata = {
-  title: "RFQ Decision Dashboard // RFQDeck",
+  title: "RFQ Decision Dashboard | RFQDeck",
   description: "Compare supplier quotes, track vendor engagement, and close RFQs.",
 };
 

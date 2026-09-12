@@ -5,7 +5,7 @@ import { getVendors } from "@/actions/vendor";
 import { getCompanyName } from "@/actions/rfq";
 
 export const metadata = {
-  title: "Dashboard // RFQDeck",
+  title: "Dashboard | RFQDeck",
   description: "Procurement control dashboard and active request statistics.",
 };
 
