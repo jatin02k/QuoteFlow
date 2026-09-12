@@ -2,6 +2,8 @@ import React from 'react'
 import Link from 'next/link'
 import InteractiveDemo from '@/components/landing/InteractiveDemo'
 
+export const dynamic = 'force-static'
+
 export const metadata = {
   title: 'RFQDeck // B2B Procure-to-Pay Engine for Indian Manufacturers',
   description: 'Automate raw material sourcing, dispatch multi-vendor RFQs with single-use tokens, and compare landed costs in unified matrices.',
